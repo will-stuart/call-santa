@@ -2,3 +2,6 @@ project_id = "rlojojqliiveizeiizyp"
 
 [functions.elevenlabs-conversation-token]
 verify_jwt = false
+
+[functions.elevenlabs-sfx]
+verify_jwt = false
