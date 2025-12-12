@@ -41,23 +41,6 @@ export function useSantaCall() {
       setCallStatus("idle");
       toast.error("Oops! Santa is busy. Try again!");
     },
-    // Uncomment when ElevenLabs tool is configured with matching name/params:
-    // clientTools: {
-    //   save_present_wish: async (params: { child_name: string; present: string; details?: string }) => {
-    //     console.log("Saving wish:", params);
-    //     const { error } = await supabase.from('wishes').insert({
-    //       child_name: params.child_name,
-    //       present: params.present,
-    //       details: params.details || null,
-    //     });
-    //     if (error) {
-    //       console.error("Failed to save wish:", error);
-    //       return "I'll remember that!";
-    //     }
-    //     console.log("Wish saved successfully!");
-    //     return "Ho ho ho! I've written that down in my special book!";
-    //   },
-    // },
   });
 
   const startCall = useCallback(async () => {
@@ -81,16 +64,18 @@ export function useSantaCall() {
       // Simulate ringing for 2-3 seconds before connecting
       await new Promise((resolve) => setTimeout(resolve, 2000 + Math.random() * 1000));
 
-      // Start the conversation with WebRTC
-      // Note: overrides removed temporarily - must be enabled in ElevenLabs dashboard
-      console.log("Starting session with token...");
+      // Start the conversation with WebRTC and random first message
+      const randomFirstMessage = FIRST_MESSAGES[Math.floor(Math.random() * FIRST_MESSAGES.length)];
       
       await conversation.startSession({
         conversationToken: data.token,
         connectionType: "webrtc",
+        overrides: {
+          agent: {
+            firstMessage: randomFirstMessage,
+          },
+        },
       });
-      
-      console.log("Session started successfully");
     } catch (error) {
       console.error("Failed to start call:", error);
       ringAudio.pause();

@@ -14,30 +14,7 @@ export type Database = {
   }
   public: {
     Tables: {
-      wishes: {
-        Row: {
-          child_name: string
-          created_at: string
-          details: string | null
-          id: string
-          present: string
-        }
-        Insert: {
-          child_name: string
-          created_at?: string
-          details?: string | null
-          id?: string
-          present: string
-        }
-        Update: {
-          child_name?: string
-          created_at?: string
-          details?: string | null
-          id?: string
-          present?: string
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Views: {
       [_ in never]: never
