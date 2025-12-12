@@ -3,6 +3,8 @@ import { CallButton } from "@/components/CallButton";
 import { SantaStatus } from "@/components/SantaStatus";
 import { useSantaCall } from "@/hooks/useSantaCall";
 import { Toaster } from "@/components/ui/sonner";
+import { Link } from "react-router-dom";
+import { Gift } from "lucide-react";
 
 const Index = () => {
   const { callStatus, isSpeaking, startCall, endCall } = useSantaCall();
@@ -10,6 +12,15 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
       <Snowfall />
+      
+      {/* Wish list link */}
+      <Link
+        to="/wishes"
+        className="absolute top-4 right-4 z-20 flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white hover:bg-white/20 transition-colors"
+      >
+        <Gift className="h-5 w-5" />
+        <span className="text-sm font-medium">Wish List</span>
+      </Link>
       
       {/* Main content */}
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4">

@@ -24,6 +24,25 @@ export function useSantaCall() {
   });
 
   const conversation = useConversation({
+    clientTools: {
+      save_present_wish: async (params: { child_name: string; present: string; details?: string }) => {
+        console.log("Saving wish:", params);
+        
+        const { error } = await supabase.from('wishes').insert({
+          child_name: params.child_name,
+          present: params.present,
+          details: params.details || null,
+        });
+        
+        if (error) {
+          console.error("Failed to save wish:", error);
+          return "I'll remember that!";
+        }
+        
+        console.log("Wish saved successfully!");
+        return "Ho ho ho! I've written that down in my special book!";
+      },
+    },
     onConnect: () => {
       console.log("Connected to Santa!");
       ringAudio.pause();
