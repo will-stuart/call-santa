@@ -81,18 +81,16 @@ export function useSantaCall() {
       // Simulate ringing for 2-3 seconds before connecting
       await new Promise((resolve) => setTimeout(resolve, 2000 + Math.random() * 1000));
 
-      // Start the conversation with WebRTC and random first message
-      const randomFirstMessage = FIRST_MESSAGES[Math.floor(Math.random() * FIRST_MESSAGES.length)];
+      // Start the conversation with WebRTC
+      // Note: overrides removed temporarily - must be enabled in ElevenLabs dashboard
+      console.log("Starting session with token...");
       
       await conversation.startSession({
         conversationToken: data.token,
         connectionType: "webrtc",
-        overrides: {
-          agent: {
-            firstMessage: randomFirstMessage,
-          },
-        },
       });
+      
+      console.log("Session started successfully");
     } catch (error) {
       console.error("Failed to start call:", error);
       ringAudio.pause();
