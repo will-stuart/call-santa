@@ -24,6 +24,23 @@ export function useSantaCall() {
   });
 
   const conversation = useConversation({
+    onConnect: () => {
+      console.log("Connected to Santa!");
+      ringAudio.pause();
+      ringAudio.currentTime = 0;
+      setCallStatus("connected");
+    },
+    onDisconnect: () => {
+      console.log("Call ended");
+      setCallStatus("idle");
+    },
+    onError: (error) => {
+      console.error("Call error:", error);
+      ringAudio.pause();
+      ringAudio.currentTime = 0;
+      setCallStatus("idle");
+      toast.error("Oops! Santa is busy. Try again!");
+    },
     clientTools: {
       save_present_wish: async (params: { child_name: string; present: string; details?: string }) => {
         console.log("Saving wish:", params);
@@ -42,23 +59,6 @@ export function useSantaCall() {
         console.log("Wish saved successfully!");
         return "Ho ho ho! I've written that down in my special book!";
       },
-    },
-    onConnect: () => {
-      console.log("Connected to Santa!");
-      ringAudio.pause();
-      ringAudio.currentTime = 0;
-      setCallStatus("connected");
-    },
-    onDisconnect: () => {
-      console.log("Call ended");
-      setCallStatus("idle");
-    },
-    onError: (error) => {
-      console.error("Call error:", error);
-      ringAudio.pause();
-      ringAudio.currentTime = 0;
-      setCallStatus("idle");
-      toast.error("Oops! Santa is busy. Try again!");
     },
   });
 
