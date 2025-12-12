@@ -18,7 +18,7 @@ const FIRST_MESSAGES = [
 export function useSantaCall() {
   const [callStatus, setCallStatus] = useState<CallStatus>("idle");
   const [ringAudio] = useState(() => {
-    const audio = new Audio("https://www.soundjay.com/phone/phone-calling-1.mp3");
+    const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3");
     audio.loop = true;
     return audio;
   });
