@@ -5,6 +5,16 @@ import { toast } from "sonner";
 
 export type CallStatus = "idle" | "ringing" | "connected" | "ending";
 
+const FIRST_MESSAGES = [
+  "Ho ho ho! Well, well, well... look who's calling Santa! Is that one of my favorite children on the line?",
+  "Merry Christmas! *jingle bells* Santa here! I was just checking my nice list and thinking about you!",
+  "Ho ho hoooo! *Santa laugh* This is Santa Claus, calling all the way from the North Pole! The elves told me you might call!",
+  "Well hello there, little one! Santa was just feeding the reindeer when you called. I'm so happy to hear from you!",
+  "Ho ho ho! *sleigh bells* Santa speaking! I've been hoping you'd call - I have my big book of wishes right here!",
+  "Why hello! *warm chuckle* Santa just came in from checking on Rudolph. His nose is shining extra bright today!",
+  "Ho ho ho! Is that who I think it is? Santa was just wrapping presents and hoping you'd give me a call!",
+];
+
 export function useSantaCall() {
   const [callStatus, setCallStatus] = useState<CallStatus>("idle");
   const [ringAudio] = useState(() => {
@@ -54,10 +64,17 @@ export function useSantaCall() {
       // Simulate ringing for 2-3 seconds before connecting
       await new Promise((resolve) => setTimeout(resolve, 2000 + Math.random() * 1000));
 
-      // Start the conversation with WebRTC
+      // Start the conversation with WebRTC and random first message
+      const randomFirstMessage = FIRST_MESSAGES[Math.floor(Math.random() * FIRST_MESSAGES.length)];
+      
       await conversation.startSession({
         conversationToken: data.token,
         connectionType: "webrtc",
+        overrides: {
+          agent: {
+            firstMessage: randomFirstMessage,
+          },
+        },
       });
     } catch (error) {
       console.error("Failed to start call:", error);
