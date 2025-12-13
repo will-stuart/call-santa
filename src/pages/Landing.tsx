@@ -97,9 +97,9 @@ const Landing = () => {
       {/* Pricing Section */}
       <section className="relative z-10 py-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-4">The Golden Ticket</h2>
+          <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-4">The Season Pass</h2>
           <p className="text-muted-foreground font-body mb-12">
-            A Season Pass to unlimited holiday magic through December 31st
+            Unlimited holiday magic through December 31st
           </p>
 
           <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
@@ -154,7 +154,7 @@ const Landing = () => {
                   onClick={() => navigate("/auth")}
                   className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-display"
                 >
-                  Get Your Golden Ticket
+                  Get Your Season Pass
                 </Button>
               </CardContent>
             </Card>
