@@ -1,24 +1,29 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Crown, CreditCard, Loader2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useSubscription } from '@/hooks/useSubscription';
-import { Snowfall } from '@/components/Snowfall';
-import { toast } from 'sonner';
+import { useNavigate } from "react-router-dom";
+import { useSubscription } from "@/hooks/useSubscription";
+import { Snowfall } from "@/components/Snowfall";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { ArrowLeft, Crown, Star, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 const Settings = () => {
   const navigate = useNavigate();
-  const { status, subscriptionEnd, isPremium, isLoading, subscribe, manageSubscription, refresh } = useSubscription();
+  const { status, subscriptionEnd, isPremium, subscribe, manageSubscription, isLoading, refresh } = useSubscription();
   const [isSubscribing, setIsSubscribing] = useState(false);
 
-  const handleSubscribe = async () => {
+  // Refresh subscription status when page loads (in case returning from Stripe)
+  useEffect(() => {
+    refresh();
+  }, [refresh]);
+
+  const handleUpgrade = async () => {
     setIsSubscribing(true);
     try {
+      toast.info("Redirecting to checkout...");
       await subscribe();
-      toast.success('Redirecting to checkout...');
     } catch (error) {
-      toast.error('Failed to start checkout');
+      toast.error("Failed to start checkout. Please try again.");
     } finally {
       setIsSubscribing(false);
     }
@@ -26,106 +31,134 @@ const Settings = () => {
 
   const handleManage = async () => {
     try {
+      toast.info("Opening subscription management...");
       await manageSubscription();
     } catch (error) {
-      toast.error('Failed to open subscription management');
+      toast.error("Failed to open portal. Please try again.");
     }
   };
 
-  // Refresh subscription status when page loads (in case returning from Stripe)
-  useEffect(() => {
-    refresh();
-  }, [refresh]);
-
   return (
-    <div className="min-h-screen bg-gradient-to-b from-red-900 via-red-800 to-green-900 p-4">
+    <div className="min-h-screen bg-background relative overflow-hidden">
       <Snowfall />
-      
-      <div className="relative z-10 max-w-md mx-auto">
-        <Button
-          variant="ghost"
-          onClick={() => navigate('/')}
-          className="text-white mb-6 hover:bg-white/10"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back
-        </Button>
 
-        <Card className="bg-white/95 backdrop-blur shadow-xl">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl text-red-800 flex items-center justify-center gap-2">
-              <Crown className="w-6 h-6 text-yellow-500" />
-              Subscription
-            </CardTitle>
-            <CardDescription>
-              Manage your Santa Calls subscription
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {isLoading ? (
-              <div className="flex justify-center py-8">
-                <Loader2 className="w-8 h-8 animate-spin text-red-600" />
-              </div>
-            ) : isPremium ? (
-              <div className="space-y-4">
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-                  <Crown className="w-8 h-8 text-yellow-500 mx-auto mb-2" />
-                  <p className="text-green-800 font-semibold">Premium Active</p>
-                  {subscriptionEnd && (
-                    <p className="text-sm text-green-600 mt-1">
-                      Renews: {new Date(subscriptionEnd).toLocaleDateString()}
-                    </p>
-                  )}
-                </div>
-                <p className="text-center text-gray-600 text-sm">
-                  Enjoy unlimited calls to Santa! 🎅
-                </p>
-                <Button
-                  onClick={handleManage}
-                  variant="outline"
-                  className="w-full"
-                >
-                  <CreditCard className="w-4 h-4 mr-2" />
-                  Manage Subscription
-                </Button>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
-                  <p className="text-gray-600 font-medium">Free Plan</p>
-                  <p className="text-sm text-gray-500 mt-1">
-                    Limited features
-                  </p>
-                </div>
-                
-                <div className="bg-gradient-to-br from-red-50 to-green-50 border-2 border-red-200 rounded-lg p-4">
-                  <h3 className="font-bold text-red-800 text-center mb-2">
-                    🎄 Premium Plan - $9.99/month
-                  </h3>
-                  <ul className="text-sm text-gray-700 space-y-1">
-                    <li>✓ Unlimited calls to Santa</li>
-                    <li>✓ Personalized conversations</li>
-                    <li>✓ Add multiple children</li>
-                    <li>✓ Custom context for each child</li>
-                  </ul>
-                </div>
+      <div className="relative z-10 min-h-screen p-4 md:p-8">
+        <div className="max-w-2xl mx-auto">
+          {/* Header */}
+          <div className="flex items-center gap-4 mb-8">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate("/")}
+              className="text-foreground hover:bg-card"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <h1 className="text-3xl font-display font-bold text-foreground">
+              ⚙️ Settings
+            </h1>
+          </div>
 
-                <Button
-                  onClick={handleSubscribe}
-                  disabled={isSubscribing}
-                  className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white"
-                >
-                  {isSubscribing ? (
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  ) : (
-                    <Crown className="w-4 h-4 mr-2" />
-                  )}
-                  Upgrade to Premium
-                </Button>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+          {/* Subscription Card */}
+          <Card className="bg-card/80 backdrop-blur border-border mb-6">
+            <CardHeader>
+              <CardTitle className="text-foreground font-display flex items-center gap-2">
+                {isPremium ? (
+                  <>
+                    <Crown className="h-5 w-5 text-accent" />
+                    Season Pass Active
+                  </>
+                ) : (
+                  <>
+                    <Star className="h-5 w-5 text-muted-foreground" />
+                    Free Plan
+                  </>
+                )}
+              </CardTitle>
+              <CardDescription className="text-muted-foreground">
+                {isLoading ? (
+                  "Checking subscription..."
+                ) : isPremium ? (
+                  `Your Season Pass is active through ${subscriptionEnd ? new Date(subscriptionEnd).toLocaleDateString() : "December 31st"}`
+                ) : (
+                  "You have 1 free call. Upgrade for unlimited calls!"
+                )}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {isLoading ? (
+                <div className="flex items-center justify-center py-4">
+                  <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                </div>
+              ) : isPremium ? (
+                <div className="space-y-4">
+                  <div className="p-4 rounded-lg bg-primary/10 border border-primary/20">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Crown className="h-4 w-4 text-accent" />
+                      <span className="font-display font-semibold text-foreground">Season Pass Benefits</span>
+                    </div>
+                    <ul className="text-sm text-muted-foreground space-y-1 font-body">
+                      <li>✓ Unlimited calls through December 31st</li>
+                      <li>✓ Full Elf Dossier customization</li>
+                      <li>✓ Multiple children supported</li>
+                    </ul>
+                  </div>
+                  <Button
+                    variant="outline"
+                    onClick={handleManage}
+                    className="w-full border-border text-foreground hover:bg-card font-display"
+                  >
+                    Manage Subscription
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="p-4 rounded-lg bg-accent/10 border border-accent/20">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Crown className="h-4 w-4 text-accent" />
+                      <span className="font-display font-semibold text-foreground">Season Pass - $30</span>
+                    </div>
+                    <ul className="text-sm text-muted-foreground space-y-1 font-body">
+                      <li>✓ Unlimited calls through December 31st</li>
+                      <li>✓ Full Elf Dossier customization</li>
+                      <li>✓ Multiple children supported</li>
+                      <li>✓ Safe & family-friendly</li>
+                    </ul>
+                  </div>
+                  <Button
+                    onClick={handleUpgrade}
+                    disabled={isSubscribing}
+                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-display py-6 text-lg"
+                  >
+                    {isSubscribing ? (
+                      <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                    ) : null}
+                    Get Your Golden Ticket 🎫
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Elf Dossier Link */}
+          <Card className="bg-card/80 backdrop-blur border-border">
+            <CardHeader>
+              <CardTitle className="text-foreground font-display">📋 Elf Dossier</CardTitle>
+              <CardDescription className="text-muted-foreground">
+                Add details about your children so Santa knows who he's talking to
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button
+                variant="outline"
+                onClick={() => navigate("/children")}
+                className="w-full border-border text-foreground hover:bg-card font-display"
+              >
+                Manage Children
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
