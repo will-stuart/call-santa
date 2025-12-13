@@ -1,6 +1,8 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { useConversation } from "@elevenlabs/react";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { useCallLimits } from "./useCallLimits";
 import { toast } from "sonner";
 
 export type CallStatus = "idle" | "ringing" | "connected" | "ending";
@@ -17,11 +19,44 @@ const FIRST_MESSAGES = [
 
 export function useSantaCall() {
   const [callStatus, setCallStatus] = useState<CallStatus>("idle");
+  const [childrenContext, setChildrenContext] = useState<string>("");
+  const { user } = useAuth();
+  const { checkCallLimits, logCall } = useCallLimits();
   const [ringAudio] = useState(() => {
     const audio = new Audio("/phone-ring.mp3");
     audio.loop = true;
     return audio;
   });
+
+  // Fetch children context on mount
+  useEffect(() => {
+    const fetchChildren = async () => {
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from("children")
+        .select("name, context")
+        .eq("user_id", user.id);
+
+      if (error) {
+        console.error("Error fetching children:", error);
+        return;
+      }
+
+      if (data && data.length > 0) {
+        const contextParts = data.map((child) => {
+          let part = `Child: ${child.name}`;
+          if (child.context) {
+            part += `\nDetails about ${child.name}: ${child.context}`;
+          }
+          return part;
+        });
+        setChildrenContext(contextParts.join("\n\n"));
+      }
+    };
+
+    fetchChildren();
+  }, [user]);
 
   const conversation = useConversation({
     onConnect: () => {
@@ -29,6 +64,8 @@ export function useSantaCall() {
       ringAudio.pause();
       ringAudio.currentTime = 0;
       setCallStatus("connected");
+      // Log the call when connected
+      logCall();
     },
     onDisconnect: () => {
       console.log("Call ended");
@@ -44,6 +81,23 @@ export function useSantaCall() {
   });
 
   const startCall = useCallback(async () => {
+    // Check call limits first
+    const limits = await checkCallLimits();
+    
+    if (!limits.canCall) {
+      if (limits.isPremium) {
+        toast.error(`You've used all ${limits.callsLimit} calls this month. Your limit resets with your next billing cycle.`);
+      } else {
+        toast.error("You've used your free call! Upgrade to the Season Pass for unlimited calls.", {
+          action: {
+            label: "Upgrade",
+            onClick: () => window.location.href = "/settings",
+          },
+        });
+      }
+      return;
+    }
+
     try {
       setCallStatus("ringing");
       
@@ -67,12 +121,18 @@ export function useSantaCall() {
       // Start the conversation with WebRTC and random first message
       const randomFirstMessage = FIRST_MESSAGES[Math.floor(Math.random() * FIRST_MESSAGES.length)];
       
+      // Build dynamic prompt with children context
+      const dynamicPrompt = childrenContext 
+        ? `You have access to the "Elf Dossier" - information about the children who might call you:\n\n${childrenContext}\n\nUse this information naturally in conversation. When a child introduces themselves, remember their details and personalize the conversation.`
+        : "";
+      
       await conversation.startSession({
         conversationToken: data.token,
         connectionType: "webrtc",
         overrides: {
           agent: {
             firstMessage: randomFirstMessage,
+            prompt: dynamicPrompt ? { prompt: dynamicPrompt } : undefined,
           },
         },
       });
@@ -83,7 +143,7 @@ export function useSantaCall() {
       setCallStatus("idle");
       toast.error("Could not connect to Santa. Make sure your microphone is enabled!");
     }
-  }, [conversation, ringAudio]);
+  }, [conversation, ringAudio, childrenContext, checkCallLimits, logCall]);
 
   const endCall = useCallback(async () => {
     setCallStatus("ending");

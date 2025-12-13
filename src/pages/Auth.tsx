@@ -73,7 +73,7 @@ const Auth = () => {
         <CardHeader className="text-center">
           <div className="text-6xl mb-4">🎅</div>
           <CardTitle className="text-3xl font-display text-foreground">
-            {isLogin ? 'Welcome Back!' : 'Join Santa Calls'}
+            {isLogin ? 'Welcome Back!' : 'Join Northline'}
           </CardTitle>
           <CardDescription className="text-muted-foreground font-body">
             {isLogin 
@@ -130,7 +130,7 @@ const Auth = () => {
           </div>
           
           <p className="mt-6 text-center text-sm text-muted-foreground font-body">
-            🎄 1 free call included, then $30/month for 30 calls 🎄
+            🎄 1 free call included, then $30 Season Pass 🎄
           </p>
         </CardContent>
       </Card>
