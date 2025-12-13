@@ -21,9 +21,8 @@ const Landing = () => {
             <span className="text-primary">Talk to their Santa.</span>
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground font-body max-w-2xl mx-auto mb-8">
-            The first conversational voice platform that gives Santa a memory. 
-            Create an "Elf Dossier" and watch your child's face light up when Santa 
-            knows their pet's name, their teacher, and exactly what they wished for.
+            The first conversational voice platform that gives Santa a memory. Create an "Elf Dossier" and watch your
+            child's face light up when Santa knows their pet's name, their teacher, and exactly what they wished for.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
@@ -48,7 +47,7 @@ const Landing = () => {
             Irrefutable Proof of Magic
           </h2>
           <p className="text-muted-foreground text-center font-body max-w-2xl mx-auto mb-12">
-            Every parent knows the struggle of keeping the magic alive. Most Santa apps are generic recordings. 
+            Every parent knows the struggle of keeping the magic alive. Most Santa apps are generic recordings.
             Northline creates real-time, two-way conversations powered by hyper-realistic voice technology.
           </p>
 
@@ -58,12 +57,10 @@ const Landing = () => {
                 <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center mb-4">
                   <Sparkles className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="text-xl font-display font-semibold text-foreground mb-2">
-                  The Elf Dossier
-                </h3>
+                <h3 className="text-xl font-display font-semibold text-foreground mb-2">The Elf Dossier</h3>
                 <p className="text-muted-foreground font-body text-sm">
-                  A simple form where you input the "Magic Details" — pet names, best friends, 
-                  recent achievements, and even those "naughty" moments. Santa weaves them naturally into conversation.
+                  A simple form where you input the "Magic Details" — pet names, best friends, recent achievements, and
+                  even those "naughty" moments. Santa weaves them naturally into conversation.
                 </p>
               </CardContent>
             </Card>
@@ -73,12 +70,10 @@ const Landing = () => {
                 <div className="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center mb-4">
                   <Phone className="h-6 w-6 text-accent" />
                 </div>
-                <h3 className="text-xl font-display font-semibold text-foreground mb-2">
-                  Hyper-Real Voice
-                </h3>
+                <h3 className="text-xl font-display font-semibold text-foreground mb-2">Hyper-Real Voice</h3>
                 <p className="text-muted-foreground font-body text-sm">
-                  Advanced voice technology ensures Santa laughs, pauses, and responds instantly — 
-                  eliminating the robotic "thinking" silence that ruins the illusion.
+                  Advanced voice technology ensures Santa laughs, pauses, and responds instantly — eliminating the
+                  robotic "thinking" silence that ruins the illusion.
                 </p>
               </CardContent>
             </Card>
@@ -88,12 +83,10 @@ const Landing = () => {
                 <div className="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center mb-4">
                   <Heart className="h-6 w-6 text-secondary" />
                 </div>
-                <h3 className="text-xl font-display font-semibold text-foreground mb-2">
-                  Real Conversations
-                </h3>
+                <h3 className="text-xl font-display font-semibold text-foreground mb-2">Real Conversations</h3>
                 <p className="text-muted-foreground font-body text-sm">
-                  Not pre-recorded. Not scripted. Your child can ask questions, share stories, 
-                  and have a genuine back-and-forth conversation with Santa.
+                  Not pre-recorded. Not scripted. Your child can ask questions, share stories, and have a genuine
+                  back-and-forth conversation with Santa.
                 </p>
               </CardContent>
             </Card>
@@ -104,9 +97,7 @@ const Landing = () => {
       {/* Pricing Section */}
       <section className="relative z-10 py-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-4">
-            The Golden Ticket
-          </h2>
+          <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-4">The Golden Ticket</h2>
           <p className="text-muted-foreground font-body mb-12">
             A Season Pass to unlimited holiday magic through December 31st
           </p>
@@ -175,9 +166,7 @@ const Landing = () => {
       <footer className="relative z-10 py-8 px-4 border-t border-border">
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-2xl mb-2">🎄</p>
-          <p className="text-muted-foreground font-body text-sm">
-            Northline — Preserving the magic of Christmas for digital-native children
-          </p>
+          <p className="text-muted-foreground font-body text-sm">Northline — Preserving the magic of Christmas</p>
           <p className="text-muted-foreground/50 font-body text-xs mt-4">
             © 2024 Northline. Made with ❤️ for families everywhere.
           </p>
