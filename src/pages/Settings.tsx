@@ -106,7 +106,7 @@ const Settings = () => {
                   <Button
                     variant="outline"
                     onClick={handleManage}
-                    className="w-full border-border text-foreground hover:bg-card font-display"
+                    className="w-full border-border text-foreground hover:bg-card hover:text-foreground font-display"
                   >
                     Manage Subscription
                   </Button>
@@ -152,7 +152,7 @@ const Settings = () => {
               <Button
                 variant="outline"
                 onClick={() => navigate("/children")}
-                className="w-full border-border text-foreground hover:bg-card font-display"
+                className="w-full border-border text-foreground hover:bg-card hover:text-foreground font-display"
               >
                 Manage Children
               </Button>
