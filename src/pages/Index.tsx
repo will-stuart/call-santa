@@ -30,7 +30,7 @@ const Index = () => {
           variant="ghost"
           size="icon"
           onClick={() => navigate('/children')}
-          className="text-foreground hover:bg-card"
+          className="text-foreground hover:bg-card hover:text-foreground"
           title="Elf Dossier"
         >
           <Users className="h-5 w-5" />
@@ -39,7 +39,7 @@ const Index = () => {
           variant="ghost"
           size="icon"
           onClick={() => navigate('/settings')}
-          className="text-foreground hover:bg-card"
+          className="text-foreground hover:bg-card hover:text-foreground"
         >
           <Settings className="h-5 w-5" />
         </Button>
@@ -47,7 +47,7 @@ const Index = () => {
           variant="ghost"
           size="icon"
           onClick={handleSignOut}
-          className="text-foreground hover:bg-card"
+          className="text-foreground hover:bg-card hover:text-foreground"
         >
           <LogOut className="h-5 w-5" />
         </Button>
