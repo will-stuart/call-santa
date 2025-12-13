@@ -54,7 +54,7 @@ export function useCallLimits() {
 
       const callsUsed = data?.length || 0;
       const totalSeconds = data?.reduce((sum, log) => sum + (log.duration_seconds || 0), 0) || 0;
-      const minutesUsed = Math.round((totalSeconds / 60) * 10) / 10; // Round to 1 decimal
+      const minutesUsed = Math.round((totalSeconds / 60) * 100) / 100; // Round to 2 decimals for precision
 
       const callsLimit = isPremium ? PREMIUM_CALLS_LIMIT : FREE_CALLS_LIMIT;
       const minutesLimit = isPremium ? PREMIUM_MINUTES_LIMIT : FREE_MINUTES_LIMIT;
