@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import { useConversation } from "@elevenlabs/react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -21,7 +21,12 @@ export function useSantaCall() {
   const [callStatus, setCallStatus] = useState<CallStatus>("idle");
   const [childrenContext, setChildrenContext] = useState<string>("");
   const { user } = useAuth();
-  const { checkCallLimits, logCall } = useCallLimits();
+  const { checkCallLimits, logCall, updateCallDuration } = useCallLimits();
+  
+  // Track call timing
+  const callStartTime = useRef<number | null>(null);
+  const currentCallLogId = useRef<string | null>(null);
+  
   const [ringAudio] = useState(() => {
     const audio = new Audio("/phone-ring.mp3");
     audio.loop = true;
@@ -58,23 +63,38 @@ export function useSantaCall() {
     fetchChildren();
   }, [user]);
 
+  // Helper to save call duration
+  const saveCallDuration = useCallback(async () => {
+    if (callStartTime.current && currentCallLogId.current) {
+      const durationSeconds = Math.round((Date.now() - callStartTime.current) / 1000);
+      await updateCallDuration(currentCallLogId.current, durationSeconds);
+      callStartTime.current = null;
+      currentCallLogId.current = null;
+    }
+  }, [updateCallDuration]);
+
   const conversation = useConversation({
-    onConnect: () => {
+    onConnect: async () => {
       console.log("Connected to Santa!");
       ringAudio.pause();
       ringAudio.currentTime = 0;
       setCallStatus("connected");
-      // Log the call when connected
-      logCall();
+      
+      // Log the call and track start time
+      const callId = await logCall();
+      currentCallLogId.current = callId;
+      callStartTime.current = Date.now();
     },
-    onDisconnect: () => {
+    onDisconnect: async () => {
       console.log("Call ended");
+      await saveCallDuration();
       setCallStatus("idle");
     },
     onError: (error) => {
       console.error("Call error:", error);
       ringAudio.pause();
       ringAudio.currentTime = 0;
+      saveCallDuration();
       setCallStatus("idle");
       toast.error("Oops! Santa is busy. Try again!");
     },
@@ -85,17 +105,33 @@ export function useSantaCall() {
     const limits = await checkCallLimits();
     
     if (!limits.canCall) {
-      if (limits.isPremium) {
-        toast.error(`You've used all ${limits.callsLimit} calls this month. Your limit resets with your next billing cycle.`);
-      } else {
-        toast.error("You've used your free call! Upgrade to the Season Pass for unlimited calls.", {
-          action: {
-            label: "Upgrade",
-            onClick: () => window.location.href = "/settings",
-          },
-        });
+      if (limits.callsUsed >= limits.callsLimit) {
+        if (limits.isPremium) {
+          toast.error(`You've used all ${limits.callsLimit} calls this month. Your limit resets with your next billing cycle.`);
+        } else {
+          toast.error(`You've used all ${limits.callsLimit} free calls! Upgrade for more.`, {
+            action: {
+              label: "Upgrade",
+              onClick: () => window.location.href = "/settings",
+            },
+          });
+        }
+        return;
       }
-      return;
+      
+      if (limits.minutesUsed >= limits.minutesLimit) {
+        if (limits.isPremium) {
+          toast.error(`You've used all ${limits.minutesLimit} minutes this month. Your limit resets with your next billing cycle.`);
+        } else {
+          toast.error(`You've used your ${limits.minutesLimit} free minutes! Upgrade for more.`, {
+            action: {
+              label: "Upgrade",
+              onClick: () => window.location.href = "/settings",
+            },
+          });
+        }
+        return;
+      }
     }
 
     try {
@@ -149,9 +185,10 @@ export function useSantaCall() {
     setCallStatus("ending");
     ringAudio.pause();
     ringAudio.currentTime = 0;
+    await saveCallDuration();
     await conversation.endSession();
     setCallStatus("idle");
-  }, [conversation, ringAudio]);
+  }, [conversation, ringAudio, saveCallDuration]);
 
   return {
     callStatus,
