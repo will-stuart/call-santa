@@ -1,21 +1,49 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useSubscription } from "@/hooks/useSubscription";
+import { useCallLimits } from "@/hooks/useCallLimits";
 import { Snowfall } from "@/components/Snowfall";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { ArrowLeft, Crown, Star, Loader2 } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { ArrowLeft, Crown, Star, Loader2, Phone, Clock } from "lucide-react";
 import { toast } from "sonner";
 
 const Settings = () => {
   const navigate = useNavigate();
   const { status, subscriptionEnd, isPremium, subscribe, manageSubscription, isLoading, refresh } = useSubscription();
+  const { checkCallLimits, PREMIUM_CALLS_LIMIT, PREMIUM_MINUTES_LIMIT, FREE_CALLS_LIMIT, FREE_MINUTES_LIMIT } = useCallLimits();
   const [isSubscribing, setIsSubscribing] = useState(false);
+  const [usage, setUsage] = useState<{
+    callsUsed: number;
+    callsLimit: number;
+    minutesUsed: number;
+    minutesLimit: number;
+  } | null>(null);
+  const [isLoadingUsage, setIsLoadingUsage] = useState(true);
 
-  // Refresh subscription status when page loads (in case returning from Stripe)
+  // Refresh subscription status and usage when page loads
   useEffect(() => {
     refresh();
+    loadUsage();
   }, [refresh]);
+
+  const loadUsage = async () => {
+    setIsLoadingUsage(true);
+    try {
+      const limits = await checkCallLimits();
+      setUsage({
+        callsUsed: limits.callsUsed,
+        callsLimit: limits.callsLimit,
+        minutesUsed: limits.minutesUsed,
+        minutesLimit: limits.minutesLimit,
+      });
+    } catch (error) {
+      console.error("Error loading usage:", error);
+    } finally {
+      setIsLoadingUsage(false);
+    }
+  };
 
   const handleUpgrade = async () => {
     setIsSubscribing(true);
@@ -38,6 +66,9 @@ const Settings = () => {
     }
   };
 
+  const callsPercent = usage ? Math.min((usage.callsUsed / usage.callsLimit) * 100, 100) : 0;
+  const minutesPercent = usage ? Math.min((usage.minutesUsed / usage.minutesLimit) * 100, 100) : 0;
+
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
       <Snowfall />
@@ -58,6 +89,57 @@ const Settings = () => {
               ⚙️ Settings
             </h1>
           </div>
+
+          {/* Usage Card */}
+          <Card className="bg-card/80 backdrop-blur border-border mb-6">
+            <CardHeader>
+              <CardTitle className="text-foreground font-display flex items-center gap-2">
+                📊 Your Usage
+              </CardTitle>
+              <CardDescription className="text-muted-foreground">
+                {isPremium ? "Season Pass usage this billing period" : "Free plan usage"}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {isLoadingUsage ? (
+                <div className="flex items-center justify-center py-4">
+                  <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                </div>
+              ) : usage ? (
+                <div className="space-y-6">
+                  {/* Calls Progress */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <div className="flex items-center gap-2 text-foreground">
+                        <Phone className="h-4 w-4" />
+                        <span className="font-body">Calls</span>
+                      </div>
+                      <span className="text-muted-foreground font-body">
+                        {usage.callsUsed} / {usage.callsLimit} used
+                      </span>
+                    </div>
+                    <Progress value={callsPercent} className="h-3" />
+                  </div>
+
+                  {/* Minutes Progress */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <div className="flex items-center gap-2 text-foreground">
+                        <Clock className="h-4 w-4" />
+                        <span className="font-body">Minutes</span>
+                      </div>
+                      <span className="text-muted-foreground font-body">
+                        {usage.minutesUsed} / {usage.minutesLimit} used
+                      </span>
+                    </div>
+                    <Progress value={minutesPercent} className="h-3" />
+                  </div>
+                </div>
+              ) : (
+                <p className="text-muted-foreground text-sm">Unable to load usage data</p>
+              )}
+            </CardContent>
+          </Card>
 
           {/* Subscription Card */}
           <Card className="bg-card/80 backdrop-blur border-border mb-6">
@@ -81,7 +163,7 @@ const Settings = () => {
                 ) : isPremium ? (
                   `Your Season Pass is active through ${subscriptionEnd ? new Date(subscriptionEnd).toLocaleDateString() : "December 31st"}`
                 ) : (
-                  "You have 1 free call. Upgrade for unlimited calls!"
+                  `${FREE_CALLS_LIMIT} free calls & ${FREE_MINUTES_LIMIT} minutes. Upgrade for more!`
                 )}
               </CardDescription>
             </CardHeader>
@@ -98,7 +180,8 @@ const Settings = () => {
                       <span className="font-display font-semibold text-foreground">Season Pass Benefits</span>
                     </div>
                     <ul className="text-sm text-muted-foreground space-y-1 font-body">
-                      <li>✓ Unlimited calls through December 31st</li>
+                      <li>✓ {PREMIUM_CALLS_LIMIT} calls per month</li>
+                      <li>✓ {PREMIUM_MINUTES_LIMIT} minutes per month</li>
                       <li>✓ Full Elf Dossier customization</li>
                       <li>✓ Multiple children supported</li>
                     </ul>
@@ -119,7 +202,8 @@ const Settings = () => {
                       <span className="font-display font-semibold text-foreground">Season Pass - $30</span>
                     </div>
                     <ul className="text-sm text-muted-foreground space-y-1 font-body">
-                      <li>✓ Unlimited calls through December 31st</li>
+                      <li>✓ {PREMIUM_CALLS_LIMIT} calls per month</li>
+                      <li>✓ {PREMIUM_MINUTES_LIMIT} minutes per month</li>
                       <li>✓ Full Elf Dossier customization</li>
                       <li>✓ Multiple children supported</li>
                       <li>✓ Safe & family-friendly</li>
