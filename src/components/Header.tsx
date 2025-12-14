@@ -79,7 +79,7 @@ const Header = ({ showAuthActions = false }: HeaderProps) => {
               variant="ghost"
               size="sm"
               onClick={() => navigate("/auth")}
-              className="text-foreground hover:bg-primary/10"
+              className="text-foreground hover:bg-primary/10 hover:text-foreground"
             >
               <LogIn className="h-4 w-4 mr-2" />
               Login
