@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useSubscription } from "@/hooks/useSubscription";
-import { Crown, Check } from "lucide-react";
+import { Crown, Check, Ticket } from "lucide-react";
 import { toast } from "sonner";
 
 interface SeasonPassModalProps {
@@ -76,9 +76,10 @@ export const SeasonPassModal = ({ open, onOpenChange, customMessage }: SeasonPas
             <Button
               onClick={handleSubscribe}
               disabled={isLoading}
-              className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-display"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-display gap-2"
             >
-              {isLoading ? "Loading..." : "Get Your Season Pass 🎫"}
+              <Ticket className="h-4 w-4" />
+              {isLoading ? "Loading..." : "Get Your Season Pass"}
             </Button>
             <Button
               variant="ghost"
