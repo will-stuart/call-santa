@@ -6,7 +6,7 @@ import { Snowfall } from "@/components/Snowfall";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, Crown, Star, Loader2, Phone, Clock } from "lucide-react";
+import { ArrowLeft, Crown, Star, Loader2, Phone, Clock, Settings as SettingsIcon, BarChart3, BookOpen } from "lucide-react";
 import { toast } from "sonner";
 
 const Settings = () => {
@@ -85,8 +85,9 @@ const Settings = () => {
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
-            <h1 className="text-3xl font-display font-bold text-foreground">
-              ⚙️ Settings
+            <h1 className="text-3xl font-display font-bold text-foreground flex items-center gap-3">
+              <SettingsIcon className="h-7 w-7" />
+              Settings
             </h1>
           </div>
 
@@ -94,7 +95,8 @@ const Settings = () => {
           <Card className="bg-card/80 backdrop-blur border-border mb-6">
             <CardHeader>
               <CardTitle className="text-foreground font-display flex items-center gap-2">
-                📊 Your Usage
+                <BarChart3 className="h-5 w-5" />
+                Your Usage
               </CardTitle>
               <CardDescription className="text-muted-foreground">
                 {isPremium ? "Season Pass usage this billing period" : "Free plan usage"}
@@ -227,7 +229,10 @@ const Settings = () => {
           {/* Knowledge Link */}
           <Card className="bg-card/80 backdrop-blur border-border">
             <CardHeader>
-              <CardTitle className="text-foreground font-display">📋 Santa's Knowledge</CardTitle>
+              <CardTitle className="text-foreground font-display flex items-center gap-2">
+                <BookOpen className="h-5 w-5" />
+                Santa's Knowledge
+              </CardTitle>
               <CardDescription className="text-muted-foreground">
                 Add knowledge so Santa knows who he's talking to
               </CardDescription>
