@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Snowfall } from "@/components/Snowfall";
 import { CallButton } from "@/components/CallButton";
 import { SantaStatus } from "@/components/SantaStatus";
@@ -18,6 +18,7 @@ const Index = () => {
   const { isPremium } = useSubscription();
   const { checkCallLimits } = useCallLimits();
   const navigate = useNavigate();
+  const hasShownToast = useRef(false);
   
   const [usage, setUsage] = useState<{
     callsUsed: number;
@@ -37,15 +38,19 @@ const Index = () => {
         minutesLimit: limits.minutesLimit,
       });
       
-      // Show warning if approaching limits (80%+)
-      const callsPercent = (limits.callsUsed / limits.callsLimit) * 100;
-      const minutesPercent = (limits.minutesUsed / limits.minutesLimit) * 100;
-      
-      if (callsPercent >= 80 && callsPercent < 100) {
-        toast.warning(`You've used ${limits.callsUsed} of ${limits.callsLimit} calls this period.`);
-      }
-      if (minutesPercent >= 80 && minutesPercent < 100) {
-        toast.warning(`You've used ${limits.minutesUsed} of ${limits.minutesLimit} minutes this period.`);
+      // Show warning if approaching limits (80%+) - only once
+      if (!hasShownToast.current) {
+        const callsPercent = (limits.callsUsed / limits.callsLimit) * 100;
+        const minutesPercent = (limits.minutesUsed / limits.minutesLimit) * 100;
+        
+        if (callsPercent >= 80 && callsPercent < 100) {
+          toast.warning(`You've used ${limits.callsUsed} of ${limits.callsLimit} calls this period.`);
+          hasShownToast.current = true;
+        }
+        if (minutesPercent >= 80 && minutesPercent < 100) {
+          toast.warning(`You've used ${limits.minutesUsed} of ${limits.minutesLimit} minutes this period.`);
+          hasShownToast.current = true;
+        }
       }
     };
     
