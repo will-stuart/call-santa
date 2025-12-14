@@ -7,14 +7,14 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useCallLimits } from "@/hooks/useCallLimits";
 import { Button } from "@/components/ui/button";
-import { LogOut, Settings, Users, Phone, Clock } from "lucide-react";
+import { LogOut, Settings, Users, Phone, Clock, Crown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 const Index = () => {
   const { callStatus, isSpeaking, startCall, endCall } = useSantaCall();
   const { signOut } = useAuth();
-  const { isPremium } = useSubscription();
+  const { isPremium, subscribe } = useSubscription();
   const { checkCallLimits } = useCallLimits();
   const navigate = useNavigate();
   const hasShownToast = useRef(false);
@@ -67,6 +67,16 @@ const Index = () => {
       
       {/* Top bar */}
       <div className="absolute top-4 right-4 z-20 flex gap-2">
+        {!isPremium && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => subscribe()}
+            className="text-accent hover:text-accent hover:bg-accent/10 font-display text-xs gap-1"
+          >
+            <Crown className="h-4 w-4" /> Upgrade
+          </Button>
+        )}
         <Button
           variant="ghost"
           size="icon"
