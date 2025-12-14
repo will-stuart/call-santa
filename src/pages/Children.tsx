@@ -155,7 +155,7 @@ const Children = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/dashboard")}
                 className="text-foreground hover:bg-card hover:text-foreground"
               >
                 <ArrowLeft className="h-5 w-5" />
