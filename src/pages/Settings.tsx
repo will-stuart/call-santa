@@ -251,28 +251,32 @@ const Settings = () => {
           {/* Subscription Card */}
           <Card className="bg-card/80 backdrop-blur border-border mb-6">
             <CardHeader>
-              <CardTitle className="text-foreground font-display flex items-center gap-2">
-                {isPremium ? (
-                  <>
-                    <Crown className="h-5 w-5 text-accent" />
-                    Season Pass Active
-                  </>
-                ) : (
-                  <>
-                    <Star className="h-5 w-5 text-muted-foreground" />
-                    Free Plan
-                  </>
-                )}
-              </CardTitle>
-              <CardDescription className="text-muted-foreground">
-                {isLoading ? (
-                  "Checking subscription..."
-                ) : isPremium ? (
-                  `Your Season Pass is active through ${subscriptionEnd ? new Date(subscriptionEnd).toLocaleDateString() : "December 31st"}`
-                ) : (
-                  `${FREE_CALLS_LIMIT} free calls & ${FREE_MINUTES_LIMIT} minutes. Upgrade for more!`
-                )}
-              </CardDescription>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="text-foreground font-display flex items-center gap-2">
+                    {isPremium ? (
+                      <>
+                        <Crown className="h-5 w-5 text-accent" />
+                        Season Pass Active
+                      </>
+                    ) : (
+                      <>
+                        <Star className="h-5 w-5 text-muted-foreground" />
+                        Free Plan
+                      </>
+                    )}
+                  </CardTitle>
+                  <CardDescription className="text-muted-foreground">
+                    {isLoading ? (
+                      "Checking subscription..."
+                    ) : isPremium ? (
+                      `Your Season Pass is active through ${subscriptionEnd ? new Date(subscriptionEnd).toLocaleDateString() : "December 31st"}`
+                    ) : (
+                      `${FREE_CALLS_LIMIT} free calls & ${FREE_MINUTES_LIMIT} minutes. Upgrade for more!`
+                    )}
+                  </CardDescription>
+                </div>
+              </div>
             </CardHeader>
             <CardContent>
               {isLoading ? (
@@ -336,13 +340,17 @@ const Settings = () => {
           {/* Usage Card */}
           <Card className="bg-card/80 backdrop-blur border-border mb-6">
             <CardHeader>
-              <CardTitle className="text-foreground font-display flex items-center gap-2">
-                <BarChart3 className="h-5 w-5" />
-                Your Usage
-              </CardTitle>
-              <CardDescription className="text-muted-foreground">
-                {isPremium ? "Season Pass usage this billing period" : "Free plan usage"}
-              </CardDescription>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="text-foreground font-display flex items-center gap-2">
+                    <BarChart3 className="h-5 w-5" />
+                    Your Usage
+                  </CardTitle>
+                  <CardDescription className="text-muted-foreground">
+                    {isPremium ? "Season Pass usage this billing period" : "Free plan usage"}
+                  </CardDescription>
+                </div>
+              </div>
             </CardHeader>
             <CardContent>
               {isLoadingUsage ? (
