@@ -48,7 +48,7 @@ const Landing = () => {
           </h2>
           <p className="text-muted-foreground text-center font-body max-w-2xl mx-auto mb-12">
             Every parent knows the struggle of keeping the magic alive. Most Santa apps are generic recordings.
-            Northline creates real-time, two-way conversations powered by hyper-realistic voice technology.
+            Call Santa creates real-time, two-way conversations powered by hyper-realistic voice technology.
           </p>
 
           <div className="grid md:grid-cols-3 gap-6">
@@ -166,9 +166,9 @@ const Landing = () => {
       <footer className="relative z-10 py-8 px-4 border-t border-border">
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-2xl mb-2">🎄</p>
-          <p className="text-muted-foreground font-body text-sm">Northline — Preserving the magic of Christmas</p>
+          <p className="text-muted-foreground font-body text-sm">Call Santa — Preserving the magic of Christmas</p>
           <p className="text-muted-foreground/50 font-body text-xs mt-4">
-            © 2024 Northline. Made with ❤️ for families everywhere.
+            © 2024 Call Santa. Made with ❤️ for families everywhere.
           </p>
         </div>
       </footer>

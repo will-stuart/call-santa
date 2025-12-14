@@ -79,7 +79,7 @@ const Auth = () => {
         <CardHeader className="text-center">
           <div className="text-6xl mb-4">🎅</div>
           <CardTitle className="text-3xl font-display text-foreground">
-            {isLogin ? 'Welcome Back!' : 'Join Northline'}
+            {isLogin ? 'Welcome Back!' : 'Join Call Santa'}
           </CardTitle>
           <CardDescription className="text-muted-foreground font-body">
             {isLogin 
