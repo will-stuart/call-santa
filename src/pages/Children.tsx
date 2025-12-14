@@ -165,7 +165,7 @@ const Children = () => {
 
       <Header showAuthActions />
 
-      <div className="relative z-10 min-h-screen p-4 md:p-8 pt-24">
+      <div className="relative z-10 min-h-screen px-4 pb-4 pt-24 md:px-8 md:pb-8">
         <div className="max-w-2xl mx-auto">
           {/* Page Title */}
           <div className="flex items-center justify-between mb-8">
