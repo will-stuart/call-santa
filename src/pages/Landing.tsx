@@ -151,7 +151,7 @@ const Landing = () => {
                   </li>
                 </ul>
                 <Button
-                  onClick={() => navigate("/auth?mode=signup")}
+                  onClick={() => navigate("/auth?mode=signup&redirect=subscribe")}
                   className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-display mt-auto"
                 >
                   Get Your Season Pass
