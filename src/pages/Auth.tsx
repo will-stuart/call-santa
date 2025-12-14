@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { useSubscription } from '@/hooks/useSubscription';
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -22,13 +22,32 @@ const Auth = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { signIn, signUp } = useAuth();
-  const { subscribe } = useSubscription();
   const navigate = useNavigate();
 
   // Update mode if URL param changes
   useEffect(() => {
     setIsLogin(searchParams.get('mode') !== 'signup');
   }, [searchParams]);
+
+  // Direct checkout function that uses a provided access token
+  const triggerCheckout = async (accessToken: string) => {
+    try {
+      const { data, error } = await supabase.functions.invoke('create-checkout', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (error) throw error;
+      if (data?.url) {
+        window.location.href = data.url;
+      }
+    } catch (error) {
+      console.error('Error creating checkout:', error);
+      toast.error('Failed to start checkout. Please try again from the dashboard.');
+      navigate('/');
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,8 +76,13 @@ const Auth = () => {
         toast.success('Welcome back!');
         
         if (shouldRedirectToSubscribe) {
-          // Small delay to let auth state settle, then trigger checkout
-          setTimeout(() => subscribe(), 500);
+          // Get fresh session and trigger checkout
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session?.access_token) {
+            await triggerCheckout(session.access_token);
+          } else {
+            navigate('/');
+          }
         } else {
           navigate('/');
         }
@@ -72,11 +96,16 @@ const Auth = () => {
           }
           return;
         }
-        toast.success('Account created! You can now call Santa.');
+        toast.success('Account created! Redirecting to checkout...');
         
         if (shouldRedirectToSubscribe) {
-          // Small delay to let auth state settle, then trigger checkout
-          setTimeout(() => subscribe(), 500);
+          // Get fresh session and trigger checkout
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session?.access_token) {
+            await triggerCheckout(session.access_token);
+          } else {
+            navigate('/');
+          }
         } else {
           navigate('/');
         }
