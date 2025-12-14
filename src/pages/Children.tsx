@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/hooks/useSubscription";
 import { supabase } from "@/integrations/supabase/client";
@@ -16,8 +15,9 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { ArrowLeft, Plus, Pencil, Trash2, BookOpen, Crown, Lock } from "lucide-react";
+import { Plus, Pencil, Trash2, BookOpen, Crown, Lock } from "lucide-react";
 import { toast } from "sonner";
+import Header from "@/components/Header";
 
 interface KnowledgeEntry {
   id: string;
@@ -30,7 +30,6 @@ const MAX_CONTEXT_LENGTH = 500;
 const FREE_KNOWLEDGE_LIMIT = 1;
 
 const Children = () => {
-  const navigate = useNavigate();
   const { user } = useAuth();
   const { isPremium, subscribe } = useSubscription();
   const [entries, setEntries] = useState<KnowledgeEntry[]>([]);
@@ -164,28 +163,20 @@ const Children = () => {
     <div className="min-h-screen bg-background relative overflow-hidden">
       <Snowfall />
 
-      <div className="relative z-10 min-h-screen p-4 md:p-8">
+      <Header showAuthActions />
+
+      <div className="relative z-10 min-h-screen p-4 md:p-8 pt-20">
         <div className="max-w-2xl mx-auto">
-          {/* Header */}
+          {/* Page Title */}
           <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => navigate("/dashboard")}
-                className="text-foreground hover:bg-card hover:text-foreground"
-              >
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-              <div>
-                <h1 className="text-3xl font-display font-bold text-foreground flex items-center gap-2">
-                  <BookOpen className="h-7 w-7" />
-                  Santa's Knowledge
-                </h1>
-                <p className="text-muted-foreground font-body text-sm">
-                  Add people and details so Santa knows who he's talking to
-                </p>
-              </div>
+            <div>
+              <h1 className="text-3xl font-display font-bold text-foreground flex items-center gap-2">
+                <BookOpen className="h-7 w-7" />
+                Santa's Knowledge
+              </h1>
+              <p className="text-muted-foreground font-body text-sm">
+                Add people and details so Santa knows who he's talking to
+              </p>
             </div>
             <Button
               onClick={openAddModal}

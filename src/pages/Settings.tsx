@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useCallLimits } from "@/hooks/useCallLimits";
 import { Snowfall } from "@/components/Snowfall";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, Crown, Star, Loader2, Phone, Clock, Settings as SettingsIcon, BarChart3, BookOpen } from "lucide-react";
+import { Crown, Star, Loader2, Phone, Clock, BarChart3, BookOpen } from "lucide-react";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+import Header from "@/components/Header";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -73,20 +74,14 @@ const Settings = () => {
     <div className="min-h-screen bg-background relative overflow-hidden">
       <Snowfall />
 
-      <div className="relative z-10 min-h-screen p-4 md:p-8">
+      <Header showAuthActions />
+
+      <div className="relative z-10 min-h-screen p-4 md:p-8 pt-20">
         <div className="max-w-2xl mx-auto">
-          {/* Header */}
-          <div className="flex items-center gap-4 mb-8">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate("/dashboard")}
-              className="text-foreground hover:bg-card hover:text-foreground"
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
+          {/* Page Title */}
+          <div className="mb-8">
             <h1 className="text-3xl font-display font-bold text-foreground flex items-center gap-3">
-              <SettingsIcon className="h-7 w-7" />
+              <BarChart3 className="h-7 w-7" />
               Settings
             </h1>
           </div>

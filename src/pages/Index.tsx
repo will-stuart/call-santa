@@ -3,20 +3,14 @@ import { Snowfall } from "@/components/Snowfall";
 import { CallButton } from "@/components/CallButton";
 import { SantaStatus } from "@/components/SantaStatus";
 import { useSantaCall } from "@/hooks/useSantaCall";
-import { useAuth } from "@/contexts/AuthContext";
-import { useSubscription } from "@/hooks/useSubscription";
 import { useCallLimits } from "@/hooks/useCallLimits";
-import { Button } from "@/components/ui/button";
-import { LogOut, Settings, Users, Phone, Clock, Crown } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Phone, Clock } from "lucide-react";
 import { toast } from "sonner";
+import Header from "@/components/Header";
 
 const Index = () => {
   const { callStatus, isSpeaking, startCall, endCall } = useSantaCall();
-  const { signOut } = useAuth();
-  const { isPremium, subscribe } = useSubscription();
   const { checkCallLimits } = useCallLimits();
-  const navigate = useNavigate();
   const hasShownToast = useRef(false);
   
   const [usage, setUsage] = useState<{
@@ -56,65 +50,14 @@ const Index = () => {
     loadUsage();
   }, [checkCallLimits]);
 
-  const handleSignOut = async () => {
-    await signOut();
-    navigate('/');
-  };
-
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
       <Snowfall />
       
-      {/* Top bar */}
-      <div className="absolute top-4 right-4 z-20 flex gap-2">
-        {!isPremium && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => subscribe()}
-            className="text-accent hover:text-accent hover:bg-accent/10 font-display text-xs gap-1"
-          >
-            <Crown className="h-4 w-4" /> Upgrade
-          </Button>
-        )}
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => navigate('/children')}
-          className="text-foreground hover:bg-card hover:text-foreground"
-          title="Elf Dossier"
-        >
-          <Users className="h-5 w-5" />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => navigate('/settings')}
-          className="text-foreground hover:bg-card hover:text-foreground"
-        >
-          <Settings className="h-5 w-5" />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={handleSignOut}
-          className="text-foreground hover:bg-card hover:text-foreground"
-        >
-          <LogOut className="h-5 w-5" />
-        </Button>
-      </div>
-      
-      {/* Subscription badge */}
-      {isPremium && (
-        <div className="absolute top-4 left-4 z-20">
-          <span className="bg-accent text-accent-foreground text-xs font-display px-3 py-1 rounded-full">
-            ✨ Season Pass
-          </span>
-        </div>
-      )}
+      <Header showAuthActions />
       
       {/* Main content */}
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4">
+      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 pt-16">
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-5xl md:text-7xl font-display font-bold text-foreground mb-4">
