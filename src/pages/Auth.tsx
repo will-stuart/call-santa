@@ -1,100 +1,139 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { SignIn, SignUp, useUser } from "@clerk/clerk-react";
-import { Snowfall } from "@/components/Snowfall";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Snowfall } from '@/components/Snowfall';
+import { toast } from 'sonner';
+import { z } from 'zod';
+
+const authSchema = z.object({
+  email: z.string().trim().email({ message: "Please enter a valid email address" }),
+  password: z.string().min(6, { message: "Password must be at least 6 characters" })
+});
 
 const Auth = () => {
-  const { isSignedIn, isLoaded } = useUser();
+  const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const { signIn, signUp } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (isLoaded && isSignedIn) {
-      navigate("/");
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Validate inputs
+    const result = authSchema.safeParse({ email, password });
+    if (!result.success) {
+      toast.error(result.error.errors[0].message);
+      return;
     }
-  }, [isSignedIn, isLoaded, navigate]);
 
-  if (!isLoaded) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-4xl animate-bounce">🎅</div>
-      </div>
-    );
-  }
+    setIsLoading(true);
+
+    try {
+      if (isLogin) {
+        const { error } = await signIn(email, password);
+        if (error) {
+          if (error.message.includes('Invalid login credentials')) {
+            toast.error('Invalid email or password');
+          } else {
+            toast.error(error.message);
+          }
+          return;
+        }
+        toast.success('Welcome back!');
+        navigate('/');
+      } else {
+        const { error } = await signUp(email, password);
+        if (error) {
+          if (error.message.includes('User already registered')) {
+            toast.error('This email is already registered. Please sign in instead.');
+          } else {
+            toast.error(error.message);
+          }
+          return;
+        }
+        toast.success('Account created! You can now call Santa.');
+        navigate('/');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
+    <div className="min-h-screen bg-background relative overflow-hidden flex items-center justify-center px-4">
       <Snowfall />
-
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-display font-bold text-foreground mb-2">
-            🎅 Northline
-          </h1>
-          <p className="text-muted-foreground font-body">
-            Sign in to talk to Santa
+      
+      <Card className="w-full max-w-md relative z-10 bg-card/90 backdrop-blur border-border">
+        <CardHeader className="text-center">
+          <div className="text-6xl mb-4">🎅</div>
+          <CardTitle className="text-3xl font-display text-foreground">
+            {isLogin ? 'Welcome Back!' : 'Join Northline'}
+          </CardTitle>
+          <CardDescription className="text-muted-foreground font-body">
+            {isLogin 
+              ? 'Sign in to call Santa' 
+              : 'Create an account to start calling Santa'}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-foreground">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="parent@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="bg-input border-border text-foreground placeholder:text-muted-foreground"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password" className="text-foreground">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={6}
+                className="bg-input border-border text-foreground placeholder:text-muted-foreground"
+              />
+            </div>
+            <Button 
+              type="submit" 
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-display text-lg py-6"
+              disabled={isLoading}
+            >
+              {isLoading ? '...' : (isLogin ? 'Sign In' : 'Create Account')}
+            </Button>
+          </form>
+          
+          <div className="mt-6 text-center">
+            <button
+              type="button"
+              onClick={() => setIsLogin(!isLogin)}
+              className="text-primary hover:text-primary/80 font-body underline"
+            >
+              {isLogin 
+                ? "Don't have an account? Sign up" 
+                : 'Already have an account? Sign in'}
+            </button>
+          </div>
+          
+          <p className="mt-6 text-center text-sm text-muted-foreground font-body">
+            🎄 1 free call included, then $30 Season Pass 🎄
           </p>
-        </div>
-
-        <div className="w-full max-w-md">
-          <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="signin" className="font-display">Sign In</TabsTrigger>
-              <TabsTrigger value="signup" className="font-display">Sign Up</TabsTrigger>
-            </TabsList>
-            <TabsContent value="signin" className="flex justify-center">
-              <SignIn 
-                routing="hash"
-                appearance={{
-                  elements: {
-                    rootBox: "w-full max-w-md",
-                    card: "bg-card border-border shadow-xl w-full",
-                    headerTitle: "text-foreground font-display",
-                    headerSubtitle: "text-muted-foreground",
-                    formButtonPrimary: "bg-primary hover:bg-primary/90",
-                    formFieldInput: "bg-background border-border text-foreground",
-                    formFieldLabel: "text-foreground",
-                    footerActionLink: "text-primary hover:text-primary/80",
-                    identityPreviewText: "text-foreground",
-                    identityPreviewEditButton: "text-primary",
-                    footer: "bg-card border-t border-border",
-                    footerAction: "text-muted-foreground",
-                    footerActionText: "text-muted-foreground",
-                    footerPages: "bg-card",
-                    footerPagesLink: "text-primary",
-                  }
-                }}
-              />
-            </TabsContent>
-            <TabsContent value="signup" className="flex justify-center">
-              <SignUp 
-                routing="hash"
-                appearance={{
-                  elements: {
-                    rootBox: "w-full max-w-md",
-                    card: "bg-card border-border shadow-xl w-full",
-                    headerTitle: "text-foreground font-display",
-                    headerSubtitle: "text-muted-foreground",
-                    formButtonPrimary: "bg-primary hover:bg-primary/90",
-                    formFieldInput: "bg-background border-border text-foreground",
-                    formFieldLabel: "text-foreground",
-                    footerActionLink: "text-primary hover:text-primary/80",
-                    footer: "bg-card border-t border-border",
-                    footerAction: "text-muted-foreground",
-                    footerActionText: "text-muted-foreground",
-                    footerPages: "bg-card",
-                    footerPagesLink: "text-primary",
-                  }
-                }}
-              />
-            </TabsContent>
-          </Tabs>
-        </div>
-
-        <p className="mt-8 text-center text-sm text-muted-foreground font-body">
-          🎄 1 free call included, then $30 Season Pass 🎄
-        </p>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

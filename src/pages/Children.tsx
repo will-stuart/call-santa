@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "@clerk/clerk-react";
+import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { useClerkSync } from "@/hooks/useClerkSync";
 import { Snowfall } from "@/components/Snowfall";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,8 +19,7 @@ interface Child {
 
 const Children = () => {
   const navigate = useNavigate();
-  const { user, isSignedIn } = useUser();
-  const { getInternalUserId } = useClerkSync();
+  const { user } = useAuth();
   const [children, setChildren] = useState<Child[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -30,15 +28,15 @@ const Children = () => {
 
   useEffect(() => {
     fetchChildren();
-  }, [user, isSignedIn]);
+  }, [user]);
 
   const fetchChildren = async () => {
-    if (!isSignedIn || !user) return;
+    if (!user) return;
     
     const { data, error } = await supabase
       .from("children")
       .select("*")
-      .eq("clerk_user_id", user.id)
+      .eq("user_id", user.id)
       .order("created_at");
 
     if (error) {
@@ -51,20 +49,13 @@ const Children = () => {
   };
 
   const handleAdd = async () => {
-    if (!isSignedIn || !user || !formData.name.trim()) {
+    if (!user || !formData.name.trim()) {
       toast.error("Please enter a name");
       return;
     }
 
-    const internalUserId = await getInternalUserId();
-    if (!internalUserId) {
-      toast.error("Failed to sync user. Please try again.");
-      return;
-    }
-
     const { error } = await supabase.from("children").insert({
-      user_id: internalUserId,
-      clerk_user_id: user.id,
+      user_id: user.id,
       name: formData.name.trim(),
       context: formData.context.trim() || null,
     });

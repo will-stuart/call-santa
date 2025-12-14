@@ -1,8 +1,7 @@
 import { useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useUser } from "@clerk/clerk-react";
+import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "./useSubscription";
-import { useClerkSync } from "./useClerkSync";
 
 interface CallLimits {
   canCall: boolean;
@@ -20,29 +19,23 @@ const PREMIUM_CALLS_LIMIT = 30;
 const PREMIUM_MINUTES_LIMIT = 100;
 
 export function useCallLimits() {
-  const { user, isSignedIn } = useUser();
+  const { user } = useAuth();
   const { isPremium, subscriptionEnd } = useSubscription();
-  const { getInternalUserId } = useClerkSync();
   const [isChecking, setIsChecking] = useState(false);
 
   const checkCallLimits = useCallback(async (): Promise<CallLimits> => {
-    if (!isSignedIn || !user) {
+    if (!user) {
       return { canCall: false, callsUsed: 0, callsLimit: 0, minutesUsed: 0, minutesLimit: 0, isPremium: false };
     }
 
     setIsChecking(true);
 
     try {
-      const internalUserId = await getInternalUserId();
-      if (!internalUserId) {
-        return { canCall: false, callsUsed: 0, callsLimit: 0, minutesUsed: 0, minutesLimit: 0, isPremium };
-      }
-
-      // Build base query using clerk_user_id
+      // Build base query
       let query = supabase
         .from("call_logs")
         .select("duration_seconds")
-        .eq("clerk_user_id", user.id);
+        .eq("user_id", user.id);
 
       // If premium, only count calls in current billing period
       if (isPremium && subscriptionEnd) {
@@ -61,7 +54,7 @@ export function useCallLimits() {
 
       const callsUsed = data?.length || 0;
       const totalSeconds = data?.reduce((sum, log) => sum + (log.duration_seconds || 0), 0) || 0;
-      const minutesUsed = Math.round((totalSeconds / 60) * 100) / 100;
+      const minutesUsed = Math.round((totalSeconds / 60) * 100) / 100; // Round to 2 decimals for precision
 
       const callsLimit = isPremium ? PREMIUM_CALLS_LIMIT : FREE_CALLS_LIMIT;
       const minutesLimit = isPremium ? PREMIUM_MINUTES_LIMIT : FREE_MINUTES_LIMIT;
@@ -72,19 +65,15 @@ export function useCallLimits() {
     } finally {
       setIsChecking(false);
     }
-  }, [user, isSignedIn, isPremium, subscriptionEnd, getInternalUserId]);
+  }, [user, isPremium, subscriptionEnd]);
 
   const logCall = useCallback(async (): Promise<string | null> => {
-    if (!isSignedIn || !user) return null;
-
-    const internalUserId = await getInternalUserId();
-    if (!internalUserId) return null;
+    if (!user) return null;
 
     const { data, error } = await supabase
       .from("call_logs")
       .insert({
-        user_id: internalUserId,
-        clerk_user_id: user.id,
+        user_id: user.id,
         started_at: new Date().toISOString(),
       })
       .select("id")
@@ -96,7 +85,7 @@ export function useCallLimits() {
     }
 
     return data?.id || null;
-  }, [user, isSignedIn, getInternalUserId]);
+  }, [user]);
 
   const updateCallDuration = useCallback(async (callLogId: string, durationSeconds: number) => {
     if (!callLogId) return;

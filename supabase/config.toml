@@ -14,12 +14,3 @@ verify_jwt = false
 
 [functions.customer-portal]
 verify_jwt = false
-
-[functions.check-subscription-clerk]
-verify_jwt = false
-
-[functions.create-checkout-clerk]
-verify_jwt = false
-
-[functions.customer-portal-clerk]
-verify_jwt = false

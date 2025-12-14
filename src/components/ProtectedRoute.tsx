@@ -1,24 +1,14 @@
 import { Navigate } from 'react-router-dom';
-import { useUser } from '@clerk/clerk-react';
-import { useEffect } from 'react';
-import { useClerkSync } from '@/hooks/useClerkSync';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { isSignedIn, isLoaded } = useUser();
-  const { syncUser } = useClerkSync();
+  const { user, loading } = useAuth();
 
-  // Sync user to database when they sign in
-  useEffect(() => {
-    if (isSignedIn) {
-      syncUser();
-    }
-  }, [isSignedIn, syncUser]);
-
-  if (!isLoaded) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-4xl animate-bounce">🎅</div>
@@ -26,7 +16,7 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     );
   }
 
-  if (!isSignedIn) {
+  if (!user) {
     return <Navigate to="/auth" replace />;
   }
 
