@@ -108,7 +108,7 @@ const Index = () => {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-5xl md:text-7xl font-display font-bold text-foreground mb-4">
-            🎅 Northline
+            🎅 Call Santa
           </h1>
           <p className="text-xl md:text-2xl font-body text-muted-foreground">
             {callStatus === "idle" && "Tap to call Santa!"}
