@@ -14,6 +14,7 @@ import { toast } from "sonner";
 interface SeasonPassModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  customMessage?: string;
 }
 
 const benefits = [
@@ -24,7 +25,7 @@ const benefits = [
   "Safe & family-friendly",
 ];
 
-export const SeasonPassModal = ({ open, onOpenChange }: SeasonPassModalProps) => {
+export const SeasonPassModal = ({ open, onOpenChange, customMessage }: SeasonPassModalProps) => {
   const { subscribe } = useSubscription();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -49,7 +50,7 @@ export const SeasonPassModal = ({ open, onOpenChange }: SeasonPassModalProps) =>
             Season Pass
           </DialogTitle>
           <DialogDescription className="text-muted-foreground">
-            Unlock the full Call Santa experience
+            {customMessage || "Unlock the full Call Santa experience"}
           </DialogDescription>
         </DialogHeader>
 

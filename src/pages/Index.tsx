@@ -2,16 +2,19 @@ import { useEffect, useState, useRef } from "react";
 import { Snowfall } from "@/components/Snowfall";
 import { CallButton } from "@/components/CallButton";
 import { SantaStatus } from "@/components/SantaStatus";
-import { useSantaCall } from "@/hooks/useSantaCall";
+import { useSantaCall, CallLimitExceeded } from "@/hooks/useSantaCall";
 import { useCallLimits } from "@/hooks/useCallLimits";
 import { Phone, Clock } from "lucide-react";
 import { toast } from "sonner";
 import Header from "@/components/Header";
+import { SeasonPassModal } from "@/components/SeasonPassModal";
 
 const Index = () => {
   const { callStatus, isSpeaking, startCall, endCall } = useSantaCall();
   const { checkCallLimits } = useCallLimits();
   const hasShownToast = useRef(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [limitMessage, setLimitMessage] = useState<string>("");
   
   const [usage, setUsage] = useState<{
     callsUsed: number;
@@ -75,7 +78,27 @@ const Index = () => {
         <div className="mb-8">
           <CallButton
             callStatus={callStatus}
-            onStartCall={startCall}
+            onStartCall={async () => {
+              const result = await startCall();
+              if (result.exceeded) {
+                if (result.isPremium) {
+                  // Premium users - show toast about billing cycle
+                  toast.error(
+                    result.type === "calls" 
+                      ? "You've used all your Season Pass calls this month. Your limit resets with your next billing cycle."
+                      : "You've used all your Season Pass minutes this month. Your limit resets with your next billing cycle."
+                  );
+                } else {
+                  // Free users - show upgrade modal with Santa-themed message
+                  setLimitMessage(
+                    result.type === "calls"
+                      ? "🎅 Ho ho hold on! You've used all your free calls to the North Pole. But don't worry - it's not too late to keep the magic going!"
+                      : "🎅 Oh my, the Christmas magic ran out of time! You've used all your free minutes. But fear not - more magical conversations await!"
+                  );
+                  setShowUpgradeModal(true);
+                }
+              }
+            }}
             onEndCall={endCall}
           />
         </div>
@@ -102,6 +125,13 @@ const Index = () => {
           <p>🎄 Merry Christmas! 🎄</p>
         </div>
       </div>
+
+      {/* Upgrade Modal */}
+      <SeasonPassModal 
+        open={showUpgradeModal} 
+        onOpenChange={setShowUpgradeModal}
+        customMessage={limitMessage}
+      />
     </div>
   );
 };
