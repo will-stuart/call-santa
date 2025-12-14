@@ -9,7 +9,6 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Install from "./pages/Install";
 import Settings from "./pages/Settings";
-import Children from "./pages/Children";
 import Landing from "./pages/Landing";
 import NotFound from "./pages/NotFound";
 
@@ -39,7 +38,7 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/install" element={<Install />} />
             <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
-            <Route path="/children" element={<ProtectedRoute><Children /></ProtectedRoute>} />
+            <Route path="/children" element={<Navigate to="/settings" replace />} />
             <Route path="/dashboard" element={<ProtectedRoute><Index /></ProtectedRoute>} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

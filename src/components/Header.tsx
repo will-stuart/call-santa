@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/hooks/useSubscription";
 import { SeasonPassModal } from "@/components/SeasonPassModal";
-import { LogIn, LogOut, Settings, Users, Crown, Phone } from "lucide-react";
+import { LogIn, LogOut, Settings, Crown, Phone } from "lucide-react";
 import { useLocation } from "react-router-dom";
 
 interface HeaderProps {
@@ -64,15 +64,6 @@ const Header = ({ showAuthActions = false }: HeaderProps) => {
                   <Crown className="h-4 w-4" /> Upgrade
                 </Button>
               )}
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => navigate('/children')}
-                className="text-foreground hover:bg-card hover:text-foreground"
-                title="Elf Dossier"
-              >
-                <Users className="h-5 w-5" />
-              </Button>
               <Button
                 variant="ghost"
                 size="icon"
