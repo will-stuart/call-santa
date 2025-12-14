@@ -103,11 +103,11 @@ const Landing = () => {
           </p>
 
           <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-            <Card className="bg-card/80 backdrop-blur border-border">
-              <CardContent className="pt-8 pb-8">
+            <Card className="bg-card/80 backdrop-blur border-border h-full">
+              <CardContent className="pt-8 pb-8 h-full flex flex-col">
                 <h3 className="text-xl font-display font-semibold text-foreground mb-2">Free Trial</h3>
                 <div className="text-4xl font-display font-bold text-foreground mb-4">$0</div>
-                <ul className="text-left space-y-3 text-muted-foreground font-body text-sm mb-6">
+                <ul className="text-left space-y-3 text-muted-foreground font-body text-sm mb-6 flex-1">
                   <li className="flex items-center gap-2">
                     <Star className="h-4 w-4 text-primary" /> 1 call with Santa
                   </li>
@@ -121,22 +121,22 @@ const Landing = () => {
                 <Button
                   variant="outline"
                   onClick={() => navigate("/auth?mode=signup")}
-                  className="w-full border-border text-foreground hover:bg-primary/10 hover:text-foreground font-display"
+                  className="w-full border-border text-foreground hover:bg-primary/10 hover:text-foreground font-display mt-auto"
                 >
                   Try Free
                 </Button>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-primary/20 to-accent/20 backdrop-blur border-primary/50 relative overflow-hidden">
+            <Card className="bg-gradient-to-br from-primary/20 to-accent/20 backdrop-blur border-primary/50 relative overflow-hidden h-full">
               <div className="absolute top-0 right-0 bg-accent text-accent-foreground text-xs font-display px-3 py-1 rounded-bl-lg">
                 BEST VALUE
               </div>
-              <CardContent className="pt-8 pb-8">
+              <CardContent className="pt-8 pb-8 h-full flex flex-col">
                 <h3 className="text-xl font-display font-semibold text-foreground mb-2">Season Pass</h3>
                 <div className="text-4xl font-display font-bold text-foreground mb-1">$30</div>
                 <p className="text-sm text-muted-foreground mb-4">one-time for the holidays</p>
-                <ul className="text-left space-y-3 text-muted-foreground font-body text-sm mb-6">
+                <ul className="text-left space-y-3 text-muted-foreground font-body text-sm mb-6 flex-1">
                   <li className="flex items-center gap-2">
                     <Star className="h-4 w-4 text-accent" /> Unlimited calls through Dec 31
                   </li>
@@ -152,7 +152,7 @@ const Landing = () => {
                 </ul>
                 <Button
                   onClick={() => navigate("/auth?mode=signup")}
-                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-display"
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-display mt-auto"
                 >
                   Get Your Season Pass
                 </Button>
