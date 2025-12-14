@@ -121,7 +121,7 @@ const Landing = () => {
                 <Button
                   variant="outline"
                   onClick={() => navigate("/auth?mode=signup")}
-                  className="w-full border-border text-foreground hover:bg-card font-display"
+                  className="w-full border-border text-foreground hover:bg-primary/10 hover:text-foreground font-display"
                 >
                   Try Free
                 </Button>
