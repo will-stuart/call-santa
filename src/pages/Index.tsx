@@ -3,7 +3,7 @@ import { Snowfall } from "@/components/Snowfall";
 import { CallButton } from "@/components/CallButton";
 import { SantaStatus } from "@/components/SantaStatus";
 import { useSantaCall } from "@/hooks/useSantaCall";
-import { useAuth } from "@/contexts/AuthContext";
+import { useClerk } from "@clerk/clerk-react";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useCallLimits } from "@/hooks/useCallLimits";
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,7 @@ import { toast } from "sonner";
 
 const Index = () => {
   const { callStatus, isSpeaking, startCall, endCall } = useSantaCall();
-  const { signOut } = useAuth();
+  const { signOut } = useClerk();
   const { isPremium } = useSubscription();
   const { checkCallLimits } = useCallLimits();
   const navigate = useNavigate();
@@ -54,7 +54,7 @@ const Index = () => {
 
   const handleSignOut = async () => {
     await signOut();
-    navigate('/auth');
+    navigate('/welcome');
   };
 
   return (

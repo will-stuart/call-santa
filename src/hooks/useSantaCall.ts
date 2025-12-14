@@ -1,8 +1,9 @@
 import { useCallback, useState, useEffect, useRef } from "react";
 import { useConversation } from "@elevenlabs/react";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/contexts/AuthContext";
+import { useUser } from "@clerk/clerk-react";
 import { useCallLimits } from "./useCallLimits";
+import { useClerkSync } from "./useClerkSync";
 import { toast } from "sonner";
 
 export type CallStatus = "idle" | "ringing" | "connected" | "ending";
@@ -20,8 +21,9 @@ const FIRST_MESSAGES = [
 export function useSantaCall() {
   const [callStatus, setCallStatus] = useState<CallStatus>("idle");
   const [childrenContext, setChildrenContext] = useState<string>("");
-  const { user } = useAuth();
+  const { user, isSignedIn } = useUser();
   const { checkCallLimits, logCall, updateCallDuration } = useCallLimits();
+  const { getInternalUserId } = useClerkSync();
   
   // Track call timing
   const callStartTime = useRef<number | null>(null);
@@ -36,12 +38,12 @@ export function useSantaCall() {
   // Fetch children context on mount
   useEffect(() => {
     const fetchChildren = async () => {
-      if (!user) return;
+      if (!isSignedIn || !user) return;
 
       const { data, error } = await supabase
         .from("children")
         .select("name, context")
-        .eq("user_id", user.id);
+        .eq("clerk_user_id", user.id);
 
       if (error) {
         console.error("Error fetching children:", error);
@@ -61,7 +63,7 @@ export function useSantaCall() {
     };
 
     fetchChildren();
-  }, [user]);
+  }, [user, isSignedIn]);
 
   // Helper to save call duration
   const saveCallDuration = useCallback(async () => {
