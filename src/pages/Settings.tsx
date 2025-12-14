@@ -421,7 +421,7 @@ const Settings = () => {
                   <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
                 </div>
               ) : entries.length === 0 ? (
-                <div className="py-12 text-center px-4">
+                <div className="py-12 text-center px-6">
                   <p className="text-4xl mb-4">🎄</p>
                   <p className="text-muted-foreground font-body">
                     No knowledge added yet. Tap "Add" to get started!
@@ -435,7 +435,7 @@ const Settings = () => {
                       return (
                         <li 
                           key={entry.id} 
-                          className={`flex items-center justify-between p-4 ${locked ? 'opacity-50 bg-muted/30' : ''}`}
+                          className={`flex items-center justify-between px-6 py-4 ${locked ? 'opacity-50 bg-muted/30' : ''}`}
                         >
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">
@@ -490,7 +490,7 @@ const Settings = () => {
                   
                   {/* Upgrade banner for free users with locked entries */}
                   {!isPremium && entries.length > FREE_KNOWLEDGE_LIMIT && (
-                    <div className="p-4 bg-accent/10 border-t border-accent/20">
+                    <div className="px-6 py-4 bg-accent/10 border-t border-accent/20">
                       <div className="flex items-center justify-between gap-4">
                         <div className="flex items-center gap-2">
                           <Crown className="h-5 w-5 text-accent" />
