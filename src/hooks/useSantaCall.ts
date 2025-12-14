@@ -157,10 +157,18 @@ export function useSantaCall() {
       // Start the conversation with WebRTC and random first message
       const randomFirstMessage = FIRST_MESSAGES[Math.floor(Math.random() * FIRST_MESSAGES.length)];
       
-      // Build dynamic prompt with children context
-      const dynamicPrompt = childrenContext 
-        ? `You have access to the "Elf Dossier" - information about the children who might call you:\n\n${childrenContext}\n\nUse this information naturally in conversation. When a child introduces themselves, remember their details and personalize the conversation.`
-        : "";
+      // Build complete Santa personality + Elf Dossier prompt
+      const baseSantaPrompt = `You are Santa Claus having a magical phone call with children. Be warm, jolly, and full of Christmas spirit. Use "Ho ho ho!" laughs naturally. Reference the North Pole, your elves, reindeer (especially Rudolph), Mrs. Claus, and Christmas magic throughout the conversation.
+
+Keep conversations age-appropriate and magical. Ask about their Christmas wishes, whether they've been good this year, and share fun stories about life at the North Pole. Be encouraging and kind.
+
+IMPORTANT: If you receive an Elf Dossier below, use that information NATURALLY in conversation - don't recite facts immediately, but weave them in organically. When a child says their name, recall their details from the dossier to personalize the conversation.`;
+
+      const elfDossier = childrenContext 
+        ? `\n\n## ELF DOSSIER - CONFIDENTIAL ##\nThe following children may be calling:\n\n${childrenContext}\n\nRemember: Use this information naturally. Don't immediately list what you know - let it come up organically in conversation.`
+        : "\n\nNo Elf Dossier available for this call. Ask the child their name and learn about them through conversation.";
+
+      const fullPrompt = baseSantaPrompt + elfDossier;
       
       await conversation.startSession({
         conversationToken: data.token,
@@ -168,7 +176,7 @@ export function useSantaCall() {
         overrides: {
           agent: {
             firstMessage: randomFirstMessage,
-            prompt: dynamicPrompt ? { prompt: dynamicPrompt } : undefined,
+            prompt: { prompt: fullPrompt },
           },
         },
       });
