@@ -252,7 +252,7 @@ const Settings = () => {
           <Card className="bg-card/80 backdrop-blur border-border mb-6">
             <CardHeader>
               <div className="flex items-center justify-between">
-                <div>
+                <div className="space-y-1.5">
                   <CardTitle className="text-foreground font-display flex items-center gap-2">
                     {isPremium ? (
                       <>
@@ -341,7 +341,7 @@ const Settings = () => {
           <Card className="bg-card/80 backdrop-blur border-border mb-6">
             <CardHeader>
               <div className="flex items-center justify-between">
-                <div>
+                <div className="space-y-1.5">
                   <CardTitle className="text-foreground font-display flex items-center gap-2">
                     <BarChart3 className="h-5 w-5" />
                     Your Usage
@@ -397,7 +397,7 @@ const Settings = () => {
           <Card className="bg-card/80 backdrop-blur border-border">
             <CardHeader>
               <div className="flex items-center justify-between">
-                <div>
+                <div className="space-y-1.5">
                   <CardTitle className="text-foreground font-display flex items-center gap-2">
                     <BookOpen className="h-5 w-5" />
                     Santa's Knowledge
