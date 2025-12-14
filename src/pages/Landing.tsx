@@ -27,7 +27,7 @@ const Landing = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
               size="lg"
-              onClick={() => navigate("/auth")}
+              onClick={() => navigate("/auth?mode=signup")}
               className="bg-primary hover:bg-primary/90 text-primary-foreground font-display text-xl py-7 px-10"
             >
               <Phone className="mr-2 h-5 w-5" />
@@ -120,7 +120,7 @@ const Landing = () => {
                 </ul>
                 <Button
                   variant="outline"
-                  onClick={() => navigate("/auth")}
+                  onClick={() => navigate("/auth?mode=signup")}
                   className="w-full border-border text-foreground hover:bg-card font-display"
                 >
                   Try Free
@@ -151,7 +151,7 @@ const Landing = () => {
                   </li>
                 </ul>
                 <Button
-                  onClick={() => navigate("/auth")}
+                  onClick={() => navigate("/auth?mode=signup")}
                   className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-display"
                 >
                   Get Your Season Pass
