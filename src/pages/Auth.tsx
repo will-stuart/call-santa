@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSubscription } from '@/hooks/useSubscription';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -21,6 +22,7 @@ const Auth = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { signIn, signUp } = useAuth();
+  const { subscribe } = useSubscription();
   const navigate = useNavigate();
 
   // Update mode if URL param changes
@@ -39,6 +41,7 @@ const Auth = () => {
     }
 
     setIsLoading(true);
+    const shouldRedirectToSubscribe = searchParams.get('redirect') === 'subscribe';
 
     try {
       if (isLogin) {
@@ -52,7 +55,13 @@ const Auth = () => {
           return;
         }
         toast.success('Welcome back!');
-        navigate('/');
+        
+        if (shouldRedirectToSubscribe) {
+          // Small delay to let auth state settle, then trigger checkout
+          setTimeout(() => subscribe(), 500);
+        } else {
+          navigate('/');
+        }
       } else {
         const { error } = await signUp(email, password);
         if (error) {
@@ -64,7 +73,13 @@ const Auth = () => {
           return;
         }
         toast.success('Account created! You can now call Santa.');
-        navigate('/');
+        
+        if (shouldRedirectToSubscribe) {
+          // Small delay to let auth state settle, then trigger checkout
+          setTimeout(() => subscribe(), 500);
+        } else {
+          navigate('/');
+        }
       }
     } finally {
       setIsLoading(false);
