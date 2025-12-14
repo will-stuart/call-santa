@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSubscription } from "@/hooks/useSubscription";
 import { supabase } from "@/integrations/supabase/client";
 import { Snowfall } from "@/components/Snowfall";
 import { Button } from "@/components/ui/button";
@@ -15,7 +16,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { ArrowLeft, Plus, Pencil, Trash2, BookOpen } from "lucide-react";
+import { ArrowLeft, Plus, Pencil, Trash2, BookOpen, Crown } from "lucide-react";
 import { toast } from "sonner";
 
 interface KnowledgeEntry {
@@ -26,10 +27,12 @@ interface KnowledgeEntry {
 
 const MAX_NAME_LENGTH = 50;
 const MAX_CONTEXT_LENGTH = 500;
+const FREE_KNOWLEDGE_LIMIT = 1;
 
 const Children = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { isPremium } = useSubscription();
   const [entries, setEntries] = useState<KnowledgeEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -114,6 +117,11 @@ const Children = () => {
   };
 
   const openAddModal = () => {
+    // Check limit for free users
+    if (!isPremium && entries.length >= FREE_KNOWLEDGE_LIMIT) {
+      toast.error("Free plan allows 1 knowledge entry. Upgrade for unlimited!");
+      return;
+    }
     setEditingEntry(null);
     setFormData({ name: "", context: "" });
     setIsModalOpen(true);
@@ -170,12 +178,20 @@ const Children = () => {
                 </p>
               </div>
             </div>
-            <Button
-              onClick={openAddModal}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground font-display"
-            >
-              <Plus className="h-4 w-4 mr-2" /> Add
-            </Button>
+            <div className="flex items-center gap-2">
+              {!isPremium && (
+                <span className="text-xs text-muted-foreground font-body">
+                  {entries.length}/{FREE_KNOWLEDGE_LIMIT}
+                </span>
+              )}
+              <Button
+                onClick={openAddModal}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-display"
+                disabled={!isPremium && entries.length >= FREE_KNOWLEDGE_LIMIT}
+              >
+                <Plus className="h-4 w-4 mr-2" /> Add
+              </Button>
+            </div>
           </div>
 
           {/* Knowledge List */}

@@ -112,7 +112,7 @@ const Landing = () => {
                     <Star className="h-4 w-4 text-primary" /> 1 call with Santa
                   </li>
                   <li className="flex items-center gap-2">
-                    <Star className="h-4 w-4 text-primary" /> Basic Elf Dossier
+                    <Star className="h-4 w-4 text-primary" /> 1 knowledge entry
                   </li>
                   <li className="flex items-center gap-2">
                     <Star className="h-4 w-4 text-primary" /> Experience the magic
@@ -141,7 +141,7 @@ const Landing = () => {
                     <Star className="h-4 w-4 text-accent" /> Unlimited calls through Dec 31
                   </li>
                   <li className="flex items-center gap-2">
-                    <Star className="h-4 w-4 text-accent" /> Full Elf Dossier customization
+                    <Star className="h-4 w-4 text-accent" /> Unlimited knowledge entries
                   </li>
                   <li className="flex items-center gap-2">
                     <Star className="h-4 w-4 text-accent" /> Multiple children supported
