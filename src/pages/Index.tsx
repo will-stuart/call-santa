@@ -9,7 +9,6 @@ import { useCallLimits } from "@/hooks/useCallLimits";
 import { Button } from "@/components/ui/button";
 import { LogOut, Settings, Users, Phone, Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 
 const Index = () => {
@@ -150,8 +149,6 @@ const Index = () => {
           <p>🎄 Merry Christmas! 🎄</p>
         </div>
       </div>
-
-      <Toaster position="top-center" />
     </div>
   );
 };
