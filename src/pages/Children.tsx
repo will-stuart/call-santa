@@ -32,7 +32,7 @@ const FREE_KNOWLEDGE_LIMIT = 1;
 const Children = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { isPremium } = useSubscription();
+  const { isPremium, subscribe } = useSubscription();
   const [entries, setEntries] = useState<KnowledgeEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -238,7 +238,7 @@ const Children = () => {
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => navigate("/")}
+                                onClick={() => subscribe()}
                                 className="text-accent hover:text-accent hover:bg-accent/10 font-display text-xs gap-1"
                               >
                                 <Crown className="h-3.5 w-3.5" /> Upgrade
@@ -281,7 +281,7 @@ const Children = () => {
                           </p>
                         </div>
                         <Button
-                          onClick={() => navigate("/")}
+                          onClick={() => subscribe()}
                           size="sm"
                           className="bg-accent hover:bg-accent/90 text-accent-foreground font-display"
                         >
