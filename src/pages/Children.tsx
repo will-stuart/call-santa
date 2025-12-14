@@ -88,6 +88,8 @@ const Children = () => {
       }
     } else {
       // Add new
+      const willBeLocked = !isPremium && entries.length >= FREE_KNOWLEDGE_LIMIT;
+      
       const { error } = await supabase.from("children").insert({
         user_id: user.id,
         name: formData.name.trim().slice(0, MAX_NAME_LENGTH),
@@ -98,9 +100,17 @@ const Children = () => {
         toast.error("Failed to add entry");
         console.error(error);
       } else {
-        toast.success(`${formData.name} added!`);
-        closeModal();
-        fetchEntries();
+        if (willBeLocked) {
+          toast.success(`${formData.name} added! Upgrade to unlock.`);
+          closeModal();
+          fetchEntries();
+          // Auto-open upgrade modal after adding a locked entry
+          setTimeout(() => setShowUpgradeModal(true), 300);
+        } else {
+          toast.success(`${formData.name} added!`);
+          closeModal();
+          fetchEntries();
+        }
       }
     }
   };
@@ -118,11 +128,7 @@ const Children = () => {
   };
 
   const openAddModal = () => {
-    // Check limit for free users
-    if (!isPremium && entries.length >= FREE_KNOWLEDGE_LIMIT) {
-      toast.error("Free plan allows 1 knowledge entry. Upgrade for unlimited!");
-      return;
-    }
+    // Allow adding - entries beyond limit will be locked
     setEditingEntry(null);
     setFormData({ name: "", context: "" });
     setIsModalOpen(true);
@@ -183,7 +189,6 @@ const Children = () => {
             <Button
               onClick={openAddModal}
               className="bg-primary hover:bg-primary/90 text-primary-foreground font-display"
-              disabled={!isPremium && entries.length >= FREE_KNOWLEDGE_LIMIT}
             >
               <Plus className="h-4 w-4 mr-2" /> Add
             </Button>
