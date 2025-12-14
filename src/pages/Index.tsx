@@ -57,7 +57,7 @@ const Index = () => {
       <Header showAuthActions />
       
       {/* Main content */}
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 pt-16">
+      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 pt-20">
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-5xl md:text-7xl font-display font-bold text-foreground mb-4">
