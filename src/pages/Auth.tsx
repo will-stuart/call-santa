@@ -47,8 +47,8 @@ const Auth = () => {
                 routing="hash"
                 appearance={{
                   elements: {
-                    rootBox: "w-full",
-                    card: "bg-card border-border shadow-xl",
+                    rootBox: "w-full max-w-md",
+                    card: "bg-card border-border shadow-xl w-full",
                     headerTitle: "text-foreground font-display",
                     headerSubtitle: "text-muted-foreground",
                     formButtonPrimary: "bg-primary hover:bg-primary/90",
@@ -57,6 +57,11 @@ const Auth = () => {
                     footerActionLink: "text-primary hover:text-primary/80",
                     identityPreviewText: "text-foreground",
                     identityPreviewEditButton: "text-primary",
+                    footer: "bg-card border-t border-border",
+                    footerAction: "text-muted-foreground",
+                    footerActionText: "text-muted-foreground",
+                    footerPages: "bg-card",
+                    footerPagesLink: "text-primary",
                   }
                 }}
               />
@@ -66,14 +71,19 @@ const Auth = () => {
                 routing="hash"
                 appearance={{
                   elements: {
-                    rootBox: "w-full",
-                    card: "bg-card border-border shadow-xl",
+                    rootBox: "w-full max-w-md",
+                    card: "bg-card border-border shadow-xl w-full",
                     headerTitle: "text-foreground font-display",
                     headerSubtitle: "text-muted-foreground",
                     formButtonPrimary: "bg-primary hover:bg-primary/90",
                     formFieldInput: "bg-background border-border text-foreground",
                     formFieldLabel: "text-foreground",
                     footerActionLink: "text-primary hover:text-primary/80",
+                    footer: "bg-card border-t border-border",
+                    footerAction: "text-muted-foreground",
+                    footerActionText: "text-muted-foreground",
+                    footerPages: "bg-card",
+                    footerPagesLink: "text-primary",
                   }
                 }}
               />
