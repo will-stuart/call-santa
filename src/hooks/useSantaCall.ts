@@ -7,6 +7,14 @@ import { toast } from "sonner";
 
 export type CallStatus = "idle" | "ringing" | "connected" | "ending";
 
+export type CallLimitExceeded = {
+  exceeded: true;
+  type: "calls" | "minutes";
+  isPremium: boolean;
+} | {
+  exceeded: false;
+};
+
 const FIRST_MESSAGES = [
   "Ho ho ho! Well, well, well... look who's calling Santa! Is that one of my favorite children on the line?",
   "Merry Christmas! *jingle bells* Santa here! I was just checking my nice list and thinking about you!",
@@ -100,37 +108,17 @@ export function useSantaCall() {
     },
   });
 
-  const startCall = useCallback(async () => {
+  const startCall = useCallback(async (): Promise<CallLimitExceeded> => {
     // Check call limits first
     const limits = await checkCallLimits();
     
     if (!limits.canCall) {
       if (limits.callsUsed >= limits.callsLimit) {
-        if (limits.isPremium) {
-          toast.error(`You've used all ${limits.callsLimit} calls this month. Your limit resets with your next billing cycle.`);
-        } else {
-          toast.error(`You've used all ${limits.callsLimit} free calls! Upgrade for more.`, {
-            action: {
-              label: "Upgrade",
-              onClick: () => window.location.href = "/settings",
-            },
-          });
-        }
-        return;
+        return { exceeded: true, type: "calls", isPremium: limits.isPremium };
       }
       
       if (limits.minutesUsed >= limits.minutesLimit) {
-        if (limits.isPremium) {
-          toast.error(`You've used all ${limits.minutesLimit} minutes this month. Your limit resets with your next billing cycle.`);
-        } else {
-          toast.error(`You've used your ${limits.minutesLimit} free minutes! Upgrade for more.`, {
-            action: {
-              label: "Upgrade",
-              onClick: () => window.location.href = "/settings",
-            },
-          });
-        }
-        return;
+        return { exceeded: true, type: "minutes", isPremium: limits.isPremium };
       }
     }
 
@@ -180,12 +168,15 @@ IMPORTANT: If you receive knowledge below, use that information NATURALLY in con
           },
         },
       });
+      
+      return { exceeded: false };
     } catch (error) {
       console.error("Failed to start call:", error);
       ringAudio.pause();
       ringAudio.currentTime = 0;
       setCallStatus("idle");
       toast.error("Could not connect to Santa. Make sure your microphone is enabled!");
+      return { exceeded: false };
     }
   }, [conversation, ringAudio, childrenContext, checkCallLimits, logCall]);
 
