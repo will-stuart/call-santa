@@ -61,7 +61,10 @@ const Settings = () => {
   }, [refresh, user]);
 
   const loadUsage = async () => {
-    setIsLoadingUsage(true);
+    // Only show loading spinner on initial load (when no data exists)
+    if (!usage) {
+      setIsLoadingUsage(true);
+    }
     try {
       const limits = await checkCallLimits();
       setUsage({
