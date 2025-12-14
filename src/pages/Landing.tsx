@@ -2,7 +2,7 @@ import { Snowfall } from "@/components/Snowfall";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { Phone, Sparkles, Heart, Shield, Star } from "lucide-react";
+import { Phone, Sparkles, Heart, Shield, Star, LogIn } from "lucide-react";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -11,8 +11,27 @@ const Landing = () => {
     <div className="min-h-screen bg-background relative overflow-hidden">
       <Snowfall />
 
+      {/* Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 px-4 py-3">
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <span className="text-2xl">🎅</span>
+            <span className="font-display font-bold text-foreground">Call Santa</span>
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate("/auth")}
+            className="text-foreground hover:bg-primary/10"
+          >
+            <LogIn className="h-4 w-4 mr-2" />
+            Login
+          </Button>
+        </div>
+      </header>
+
       {/* Hero Section */}
-      <section className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-16">
+      <section className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-16 pt-20">
         <div className="text-center max-w-4xl mx-auto">
           <div className="text-7xl md:text-8xl mb-6">🎅</div>
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold text-foreground mb-6 leading-tight">
