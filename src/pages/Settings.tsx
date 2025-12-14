@@ -18,7 +18,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { SeasonPassModal } from "@/components/SeasonPassModal";
-import { Crown, Star, Loader2, Phone, Clock, BarChart3, BookOpen, Plus, Pencil, Trash2, Lock } from "lucide-react";
+import { Crown, Star, Loader2, Phone, Clock, BarChart3, BookOpen, Plus, Pencil, Trash2, Lock, ChevronLeft } from "lucide-react";
 import { toast } from "sonner";
 import Header from "@/components/Header";
 
@@ -228,6 +228,15 @@ const Settings = () => {
 
       <div className="relative z-10 min-h-screen px-4 pb-4 pt-24 md:px-8 md:pb-8">
         <div className="max-w-2xl mx-auto">
+          {/* Back to Dashboard */}
+          <button 
+            onClick={() => window.location.href = '/dashboard'}
+            className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors mb-4 font-body text-sm"
+          >
+            <ChevronLeft className="h-4 w-4" />
+            Back to Dashboard
+          </button>
+
           {/* Page Title */}
           <div className="mb-8">
             <h1 className="text-3xl font-display font-bold text-foreground flex items-center gap-3">
