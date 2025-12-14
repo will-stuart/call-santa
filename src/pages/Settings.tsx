@@ -224,12 +224,12 @@ const Settings = () => {
             </CardContent>
           </Card>
 
-          {/* Elf Dossier Link */}
+          {/* Knowledge Link */}
           <Card className="bg-card/80 backdrop-blur border-border">
             <CardHeader>
-              <CardTitle className="text-foreground font-display">📋 Elf Dossier</CardTitle>
+              <CardTitle className="text-foreground font-display">📋 Santa's Knowledge</CardTitle>
               <CardDescription className="text-muted-foreground">
-                Add details about your children so Santa knows who he's talking to
+                Add knowledge so Santa knows who he's talking to
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -238,7 +238,7 @@ const Settings = () => {
                 onClick={() => navigate("/children")}
                 className="w-full border-border text-foreground hover:bg-card hover:text-foreground font-display"
               >
-                Manage Children
+                Manage Knowledge
               </Button>
             </CardContent>
           </Card>
