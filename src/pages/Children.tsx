@@ -15,7 +15,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { ArrowLeft, Plus, Pencil, Trash2 } from "lucide-react";
+import { ArrowLeft, Plus, Pencil, Trash2, BookOpen } from "lucide-react";
 import { toast } from "sonner";
 
 interface KnowledgeEntry {
@@ -161,8 +161,9 @@ const Children = () => {
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <div>
-                <h1 className="text-3xl font-display font-bold text-foreground">
-                  📋 Santa's Knowledge
+                <h1 className="text-3xl font-display font-bold text-foreground flex items-center gap-2">
+                  <BookOpen className="h-7 w-7" />
+                  Santa's Knowledge
                 </h1>
                 <p className="text-muted-foreground font-body text-sm">
                   Add people and details so Santa knows who he's talking to
