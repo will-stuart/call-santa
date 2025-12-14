@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/hooks/useSubscription";
+import { SeasonPassModal } from "@/components/SeasonPassModal";
 import { LogIn, LogOut, Settings, Users, Crown } from "lucide-react";
 
 interface HeaderProps {
@@ -11,7 +13,8 @@ interface HeaderProps {
 const Header = ({ showAuthActions = false }: HeaderProps) => {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
-  const { isPremium, subscribe } = useSubscription();
+  const { isPremium } = useSubscription();
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   const handleSignOut = async () => {
     await signOut();
@@ -42,7 +45,7 @@ const Header = ({ showAuthActions = false }: HeaderProps) => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => subscribe()}
+                  onClick={() => setShowUpgradeModal(true)}
                   className="text-accent hover:text-accent hover:bg-accent/10 font-display text-xs gap-1"
                 >
                   <Crown className="h-4 w-4" /> Upgrade
@@ -87,6 +90,8 @@ const Header = ({ showAuthActions = false }: HeaderProps) => {
           )}
         </div>
       </div>
+
+      <SeasonPassModal open={showUpgradeModal} onOpenChange={setShowUpgradeModal} />
     </header>
   );
 };

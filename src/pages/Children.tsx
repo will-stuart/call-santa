@@ -15,6 +15,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { SeasonPassModal } from "@/components/SeasonPassModal";
 import { Plus, Pencil, Trash2, BookOpen, Crown, Lock } from "lucide-react";
 import { toast } from "sonner";
 import Header from "@/components/Header";
@@ -31,12 +32,13 @@ const FREE_KNOWLEDGE_LIMIT = 1;
 
 const Children = () => {
   const { user } = useAuth();
-  const { isPremium, subscribe } = useSubscription();
+  const { isPremium } = useSubscription();
   const [entries, setEntries] = useState<KnowledgeEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingEntry, setEditingEntry] = useState<KnowledgeEntry | null>(null);
   const [formData, setFormData] = useState({ name: "", context: "" });
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   useEffect(() => {
     fetchEntries();
@@ -229,7 +231,7 @@ const Children = () => {
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => subscribe()}
+                                onClick={() => setShowUpgradeModal(true)}
                                 className="text-accent hover:text-accent hover:bg-accent/10 font-display text-xs gap-1"
                               >
                                 <Crown className="h-3.5 w-3.5" /> Upgrade
@@ -272,7 +274,7 @@ const Children = () => {
                           </p>
                         </div>
                         <Button
-                          onClick={() => subscribe()}
+                          onClick={() => setShowUpgradeModal(true)}
                           size="sm"
                           className="bg-accent hover:bg-accent/90 text-accent-foreground font-display"
                         >
@@ -351,6 +353,8 @@ const Children = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      <SeasonPassModal open={showUpgradeModal} onOpenChange={setShowUpgradeModal} />
     </div>
   );
 };
