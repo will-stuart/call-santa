@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/hooks/useSubscription";
 import { SeasonPassModal } from "@/components/SeasonPassModal";
-import { LogIn, LogOut, Settings, Crown, Phone } from "lucide-react";
+import { LogIn, LogOut, Settings, Crown } from "lucide-react";
 import { useLocation } from "react-router-dom";
 
 interface HeaderProps {
@@ -13,10 +13,8 @@ interface HeaderProps {
 
 const Header = ({ showAuthActions = false }: HeaderProps) => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { user, signOut } = useAuth();
   const { isPremium } = useSubscription();
-  const isOnDashboard = location.pathname === '/dashboard';
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   const handleSignOut = async () => {
@@ -40,16 +38,6 @@ const Header = ({ showAuthActions = false }: HeaderProps) => {
         <div className="flex items-center gap-2">
           {showAuthActions && user ? (
             <>
-              {!isOnDashboard && (
-                <Button
-                  variant="default"
-                  size="sm"
-                  onClick={() => navigate('/dashboard')}
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground font-display gap-1 mr-2"
-                >
-                  <Phone className="h-4 w-4" /> Call
-                </Button>
-              )}
               {isPremium ? (
                 <span className="bg-accent text-accent-foreground text-xs font-display px-3 py-1 rounded-full mr-2">
                   ✨ Season Pass
