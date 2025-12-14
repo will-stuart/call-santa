@@ -33,9 +33,9 @@ export function useSantaCall() {
     return audio;
   });
 
-  // Fetch children context on mount
+  // Fetch knowledge context on mount
   useEffect(() => {
-    const fetchChildren = async () => {
+    const fetchKnowledge = async () => {
       if (!user) return;
 
       const { data, error } = await supabase
@@ -44,15 +44,15 @@ export function useSantaCall() {
         .eq("user_id", user.id);
 
       if (error) {
-        console.error("Error fetching children:", error);
+        console.error("Error fetching knowledge:", error);
         return;
       }
 
       if (data && data.length > 0) {
-        const contextParts = data.map((child) => {
-          let part = `Child: ${child.name}`;
-          if (child.context) {
-            part += `\nDetails about ${child.name}: ${child.context}`;
+        const contextParts = data.map((entry) => {
+          let part = `Person: ${entry.name}`;
+          if (entry.context) {
+            part += `\nDetails: ${entry.context}`;
           }
           return part;
         });
@@ -60,7 +60,7 @@ export function useSantaCall() {
       }
     };
 
-    fetchChildren();
+    fetchKnowledge();
   }, [user]);
 
   // Helper to save call duration
@@ -157,18 +157,18 @@ export function useSantaCall() {
       // Start the conversation with WebRTC and random first message
       const randomFirstMessage = FIRST_MESSAGES[Math.floor(Math.random() * FIRST_MESSAGES.length)];
       
-      // Build complete Santa personality + Elf Dossier prompt
-      const baseSantaPrompt = `You are Santa Claus having a magical phone call with children. Be warm, jolly, and full of Christmas spirit. Use "Ho ho ho!" laughs naturally. Reference the North Pole, your elves, reindeer (especially Rudolph), Mrs. Claus, and Christmas magic throughout the conversation.
+      // Build complete Santa personality + knowledge prompt
+      const baseSantaPrompt = `You are Santa Claus having a magical phone call. Be warm, jolly, and full of Christmas spirit. Use "Ho ho ho!" laughs naturally. Reference the North Pole, your elves, reindeer (especially Rudolph), Mrs. Claus, and Christmas magic throughout the conversation.
 
-Keep conversations age-appropriate and magical. Ask about their Christmas wishes, whether they've been good this year, and share fun stories about life at the North Pole. Be encouraging and kind.
+Keep conversations age-appropriate and magical. Ask about Christmas wishes, whether they've been good this year, and share fun stories about life at the North Pole. Be encouraging and kind.
 
-IMPORTANT: If you receive an Elf Dossier below, use that information NATURALLY in conversation - don't recite facts immediately, but weave them in organically. When a child says their name, recall their details from the dossier to personalize the conversation.`;
+IMPORTANT: If you receive knowledge below, use that information NATURALLY in conversation - don't recite facts immediately, but weave them in organically. When someone says their name, recall their details to personalize the conversation.`;
 
-      const elfDossier = childrenContext 
-        ? `\n\n## ELF DOSSIER - CONFIDENTIAL ##\nThe following children may be calling:\n\n${childrenContext}\n\nRemember: Use this information naturally. Don't immediately list what you know - let it come up organically in conversation.`
-        : "\n\nNo Elf Dossier available for this call. Ask the child their name and learn about them through conversation.";
+      const knowledgeSection = childrenContext 
+        ? `\n\n## SANTA'S KNOWLEDGE ##\nPeople you may be speaking with:\n\n${childrenContext}\n\nRemember: Use this information naturally. Don't immediately list what you know - let it come up organically in conversation.`
+        : "\n\nNo knowledge available for this call. Ask who you're speaking with and learn about them through conversation.";
 
-      const fullPrompt = baseSantaPrompt + elfDossier;
+      const fullPrompt = baseSantaPrompt + knowledgeSection;
       
       await conversation.startSession({
         conversationToken: data.token,
