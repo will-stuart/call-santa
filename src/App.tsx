@@ -3,7 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "@/contexts/AuthContext";
+import { ClerkLoaded, ClerkLoading } from "@clerk/clerk-react";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
@@ -17,10 +17,15 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <ClerkLoading>
+        <div className="min-h-screen bg-background flex items-center justify-center">
+          <div className="text-4xl animate-bounce">🎅</div>
+        </div>
+      </ClerkLoading>
+      <ClerkLoaded>
         <BrowserRouter>
           <Routes>
             <Route path="/welcome" element={<Landing />} />
@@ -40,8 +45,8 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
-      </TooltipProvider>
-    </AuthProvider>
+      </ClerkLoaded>
+    </TooltipProvider>
   </QueryClientProvider>
 );
 
