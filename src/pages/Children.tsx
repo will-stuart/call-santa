@@ -16,7 +16,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { ArrowLeft, Plus, Pencil, Trash2, BookOpen, Crown } from "lucide-react";
+import { ArrowLeft, Plus, Pencil, Trash2, BookOpen, Crown, Lock } from "lucide-react";
 import { toast } from "sonner";
 
 interface KnowledgeEntry {
@@ -127,10 +127,19 @@ const Children = () => {
     setIsModalOpen(true);
   };
 
-  const openEditModal = (entry: KnowledgeEntry) => {
+  const openEditModal = (entry: KnowledgeEntry, index: number) => {
+    // Check if this entry is locked for free users
+    if (!isPremium && index >= FREE_KNOWLEDGE_LIMIT) {
+      toast.error("Upgrade to Season Pass to edit this entry!");
+      return;
+    }
     setEditingEntry(entry);
     setFormData({ name: entry.name, context: entry.context || "" });
     setIsModalOpen(true);
+  };
+
+  const isEntryLocked = (index: number) => {
+    return !isPremium && index >= FREE_KNOWLEDGE_LIMIT;
   };
 
   const closeModal = () => {
@@ -178,20 +187,13 @@ const Children = () => {
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              {!isPremium && (
-                <span className="text-xs text-muted-foreground font-body">
-                  {entries.length}/{FREE_KNOWLEDGE_LIMIT}
-                </span>
-              )}
-              <Button
-                onClick={openAddModal}
-                className="bg-primary hover:bg-primary/90 text-primary-foreground font-display"
-                disabled={!isPremium && entries.length >= FREE_KNOWLEDGE_LIMIT}
-              >
-                <Plus className="h-4 w-4 mr-2" /> Add
-              </Button>
-            </div>
+            <Button
+              onClick={openAddModal}
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-display"
+              disabled={!isPremium && entries.length >= FREE_KNOWLEDGE_LIMIT}
+            >
+              <Plus className="h-4 w-4 mr-2" /> Add
+            </Button>
           </div>
 
           {/* Knowledge List */}
@@ -207,40 +209,88 @@ const Children = () => {
                   </p>
                 </div>
               ) : (
-                <ul className="divide-y divide-border">
-                  {entries.map((entry) => (
-                    <li key={entry.id} className="flex items-center justify-between p-4">
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-display font-semibold text-foreground truncate">
-                          {entry.name}
-                        </h3>
-                        {entry.context && (
-                          <p className="text-muted-foreground font-body text-sm truncate">
-                            {entry.context}
+                <>
+                  <ul className="divide-y divide-border">
+                    {entries.map((entry, index) => {
+                      const locked = isEntryLocked(index);
+                      return (
+                        <li 
+                          key={entry.id} 
+                          className={`flex items-center justify-between p-4 ${locked ? 'opacity-50 bg-muted/30' : ''}`}
+                        >
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2">
+                              <h3 className="font-display font-semibold text-foreground truncate">
+                                {entry.name}
+                              </h3>
+                              {locked && (
+                                <Lock className="h-3.5 w-3.5 text-muted-foreground flex-shrink-0" />
+                              )}
+                            </div>
+                            {entry.context && (
+                              <p className="text-muted-foreground font-body text-sm truncate">
+                                {entry.context}
+                              </p>
+                            )}
+                          </div>
+                          <div className="flex gap-1 ml-4">
+                            {locked ? (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => navigate("/")}
+                                className="text-accent hover:text-accent hover:bg-accent/10 font-display text-xs gap-1"
+                              >
+                                <Crown className="h-3.5 w-3.5" /> Upgrade
+                              </Button>
+                            ) : (
+                              <>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => openEditModal(entry, index)}
+                                  className="text-muted-foreground hover:text-foreground h-8 w-8"
+                                >
+                                  <Pencil className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => handleDelete(entry)}
+                                  className="text-muted-foreground hover:text-destructive h-8 w-8"
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </>
+                            )}
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  
+                  {/* Upgrade banner for free users with locked entries */}
+                  {!isPremium && entries.length > FREE_KNOWLEDGE_LIMIT && (
+                    <div className="p-4 bg-accent/10 border-t border-accent/20">
+                      <div className="flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-2">
+                          <Crown className="h-5 w-5 text-accent" />
+                          <p className="text-sm font-body text-foreground">
+                            <span className="font-semibold">{entries.length - FREE_KNOWLEDGE_LIMIT} entries locked.</span>{" "}
+                            Upgrade for unlimited knowledge!
                           </p>
-                        )}
-                      </div>
-                      <div className="flex gap-1 ml-4">
+                        </div>
                         <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => openEditModal(entry)}
-                          className="text-muted-foreground hover:text-foreground h-8 w-8"
+                          onClick={() => navigate("/")}
+                          size="sm"
+                          className="bg-accent hover:bg-accent/90 text-accent-foreground font-display"
                         >
-                          <Pencil className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleDelete(entry)}
-                          className="text-muted-foreground hover:text-destructive h-8 w-8"
-                        >
-                          <Trash2 className="h-4 w-4" />
+                          Get Season Pass
                         </Button>
                       </div>
-                    </li>
-                  ))}
-                </ul>
+                    </div>
+                  )}
+                </>
               )}
             </CardContent>
           </Card>
