@@ -22,18 +22,36 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        console.log('[Auth] State change:', event, session?.user?.id);
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
       }
     );
 
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    // THEN check for existing session and validate it
+    const validateSession = async () => {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      
+      if (session) {
+        // Verify the user actually exists by making a test call
+        const { error: userError } = await supabase.auth.getUser();
+        if (userError) {
+          console.log('[Auth] Session invalid, user not found. Signing out...');
+          await supabase.auth.signOut();
+          setSession(null);
+          setUser(null);
+          setLoading(false);
+          return;
+        }
+      }
+      
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
-    });
+    };
+    
+    validateSession();
 
     return () => subscription.unsubscribe();
   }, []);
