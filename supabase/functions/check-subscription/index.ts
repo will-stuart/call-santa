@@ -65,8 +65,18 @@ serve(async (req) => {
 
     if (hasActiveSub) {
       const subscription = subscriptions.data[0];
-      subscriptionEnd = new Date(subscription.current_period_end * 1000).toISOString();
       stripeSubscriptionId = subscription.id;
+      
+      // Defensive handling of current_period_end
+      const periodEnd = subscription.current_period_end;
+      logStep("Raw period end value", { periodEnd, type: typeof periodEnd });
+      
+      if (periodEnd && typeof periodEnd === 'number') {
+        subscriptionEnd = new Date(periodEnd * 1000).toISOString();
+      } else {
+        logStep("Period end not a valid number, skipping date conversion");
+      }
+      
       logStep("Active subscription found", { subscriptionId: subscription.id, endDate: subscriptionEnd });
       
       // Update subscriptions table
@@ -82,6 +92,8 @@ serve(async (req) => {
       
       if (updateError) {
         logStep("Error updating subscription", { error: updateError.message });
+      } else {
+        logStep("Database updated successfully");
       }
     } else {
       logStep("No active subscription found");
