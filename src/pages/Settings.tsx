@@ -18,7 +18,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { SeasonPassModal } from "@/components/SeasonPassModal";
-import { Crown, Star, Loader2, Phone, Clock, BarChart3, BookOpen, Plus, Pencil, Trash2, Lock, ChevronLeft } from "lucide-react";
+import { Crown, Star, Loader2, Phone, Clock, BarChart3, BookOpen, Plus, Pencil, Trash2, Lock, ChevronLeft, Ticket } from "lucide-react";
 import { toast } from "sonner";
 import Header from "@/components/Header";
 
@@ -323,8 +323,10 @@ const Settings = () => {
                   >
                     {isSubscribing ? (
                       <Loader2 className="h-5 w-5 animate-spin mr-2" />
-                    ) : null}
-                    Get Your Season Pass 🎫
+                    ) : (
+                      <Ticket className="h-5 w-5 mr-2" />
+                    )}
+                    Get Your Season Pass
                   </Button>
                 </div>
               )}
