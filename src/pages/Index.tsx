@@ -7,6 +7,7 @@ import { useCallLimits } from "@/hooks/useCallLimits";
 import { Phone, Clock } from "lucide-react";
 import { toast } from "sonner";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { SeasonPassModal } from "@/components/SeasonPassModal";
 
 const Index = () => {
@@ -54,7 +55,7 @@ const Index = () => {
   }, [checkCallLimits]);
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
+    <div className="min-h-screen bg-background relative overflow-hidden flex flex-col">
       <Snowfall />
       
       <Header showAuthActions />
@@ -120,11 +121,11 @@ const Index = () => {
           </div>
         )}
 
-        {/* Decorative elements */}
-        <div className="absolute bottom-8 text-center text-muted-foreground text-sm font-body">
-          <p>🎄 Merry Christmas! 🎄</p>
-        </div>
+        {/* Spacer to push footer down */}
+        <div className="flex-1" />
       </div>
+
+      <Footer />
 
       {/* Upgrade Modal */}
       <SeasonPassModal 
