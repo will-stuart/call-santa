@@ -60,8 +60,8 @@ const Index = () => {
       
       <Header showAuthActions />
       
-      {/* Main content */}
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 pt-20">
+      {/* Main content - centered */}
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-4">
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-5xl md:text-7xl font-display font-bold text-foreground mb-4">
@@ -120,9 +120,6 @@ const Index = () => {
             </div>
           </div>
         )}
-
-        {/* Spacer to push footer down */}
-        <div className="flex-1" />
       </div>
 
       <Footer />
