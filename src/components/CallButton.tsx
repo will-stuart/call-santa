@@ -1,6 +1,7 @@
-import { Phone, PhoneOff } from "lucide-react";
+import { PhoneOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { CallStatus } from "@/hooks/useSantaCall";
+import santaImage from "@/assets/santa.png";
 
 interface CallButtonProps {
   callStatus: CallStatus;
@@ -17,7 +18,7 @@ export function CallButton({ callStatus, onStartCall, onEndCall }: CallButtonPro
         className="w-48 h-48 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-2xl animate-pulse-glow transition-all duration-300 hover:scale-105"
       >
         <div className="flex flex-col items-center gap-3">
-          <Phone className="w-16 h-16" />
+          <img src={santaImage} alt="Santa" className="w-16 h-16 object-contain" />
           <span className="text-xl font-display font-bold">Call Santa</span>
         </div>
       </Button>
@@ -29,7 +30,7 @@ export function CallButton({ callStatus, onStartCall, onEndCall }: CallButtonPro
       <div className="flex flex-col items-center gap-6">
         <div className="w-48 h-48 rounded-full bg-primary/20 border-4 border-primary flex items-center justify-center animate-ring-pulse">
           <div className="flex flex-col items-center gap-3">
-            <Phone className="w-16 h-16 text-primary animate-bounce-soft" />
+            <img src={santaImage} alt="Santa" className="w-16 h-16 object-contain animate-bounce-soft" />
             <span className="text-xl font-display font-bold text-primary">Calling...</span>
           </div>
         </div>
@@ -52,7 +53,7 @@ export function CallButton({ callStatus, onStartCall, onEndCall }: CallButtonPro
         <div className="w-48 h-48 rounded-full bg-christmas-green/20 border-4 border-christmas-green flex items-center justify-center">
           <div className="flex flex-col items-center gap-3">
             <div className="w-16 h-16 rounded-full bg-christmas-green flex items-center justify-center">
-              <Phone className="w-8 h-8 text-primary-foreground" />
+              <img src={santaImage} alt="Santa" className="w-10 h-10 object-contain" />
             </div>
             <span className="text-xl font-display font-bold text-christmas-green">
               {callStatus === "ending" ? "Ending..." : "Connected!"}
