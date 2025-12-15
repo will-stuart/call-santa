@@ -9,6 +9,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Snowfall } from '@/components/Snowfall';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { Link } from 'react-router-dom';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const authSchema = z.object({
   email: z.string().trim().email({ message: "Please enter a valid email address" }),
@@ -21,6 +23,7 @@ const Auth = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [agreedToPrivacy, setAgreedToPrivacy] = useState(false);
   const { signIn, signUp } = useAuth();
   const navigate = useNavigate();
 
@@ -158,10 +161,29 @@ const Auth = () => {
                 className="bg-input border-border text-foreground placeholder:text-muted-foreground"
               />
             </div>
+            {/* Privacy consent for signup */}
+            {!isLogin && (
+              <div className="flex items-start space-x-3">
+                <Checkbox
+                  id="privacy"
+                  checked={agreedToPrivacy}
+                  onCheckedChange={(checked) => setAgreedToPrivacy(checked === true)}
+                  className="mt-1"
+                />
+                <label htmlFor="privacy" className="text-sm text-muted-foreground font-body leading-relaxed">
+                  I agree to the{' '}
+                  <Link to="/privacy" className="text-primary hover:underline" target="_blank">
+                    Privacy Policy
+                  </Link>{' '}
+                  and consent to Call Santa processing my family's information to personalize Santa calls.
+                </label>
+              </div>
+            )}
+
             <Button 
               type="submit" 
               className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-display text-lg py-6"
-              disabled={isLoading}
+              disabled={isLoading || (!isLogin && !agreedToPrivacy)}
             >
               {isLoading ? '...' : (isLogin ? 'Sign In' : 'Create Account')}
             </Button>
