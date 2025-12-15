@@ -271,7 +271,7 @@ const Settings = () => {
 
   // Delete account handler
   const handleDeleteAccount = async () => {
-    if (!session || deleteConfirmText !== "DELETE") return;
+    if (!session || !user?.email || deleteConfirmText !== user.email) return;
     setIsDeleting(true);
     try {
       const { data, error } = await supabase.functions.invoke('delete-account', {
@@ -621,7 +621,7 @@ const Settings = () => {
                   size="sm"
                   onClick={handleExportData}
                   disabled={isExporting}
-                  className="border-border text-foreground hover:bg-card"
+                  className="border-border text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary"
                 >
                   {isExporting ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
@@ -742,14 +742,14 @@ const Settings = () => {
                 </p>
               )}
               <p className="pt-2">
-                Type <strong>DELETE</strong> to confirm:
+                Type your email address <strong>{user?.email}</strong> to confirm:
               </p>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <Input
             value={deleteConfirmText}
             onChange={(e) => setDeleteConfirmText(e.target.value)}
-            placeholder="Type DELETE to confirm"
+            placeholder="Enter your email address"
             className="bg-input border-border text-foreground"
           />
           <AlertDialogFooter>
@@ -761,7 +761,7 @@ const Settings = () => {
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteAccount}
-              disabled={deleteConfirmText !== "DELETE" || isDeleting}
+              disabled={deleteConfirmText !== user?.email || isDeleting}
               className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
             >
               {isDeleting ? (
