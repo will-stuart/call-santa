@@ -172,10 +172,13 @@ const Auth = () => {
                 />
                 <label htmlFor="privacy" className="text-sm text-muted-foreground font-body leading-relaxed">
                   I agree to the{' '}
-                  <Link to="/privacy" className="text-primary hover:underline" target="_blank">
+                  <a href="/privacy" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">
                     Privacy Policy
-                  </Link>{' '}
-                  and consent to Call Santa processing my family's information to personalize Santa calls.
+                  </a>{' '}
+                  and{' '}
+                  <a href="/terms" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">
+                    Terms of Use
+                  </a>
                 </label>
               </div>
             )}
