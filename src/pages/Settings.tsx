@@ -316,7 +316,7 @@ const Settings = () => {
         <div className="max-w-2xl mx-auto">
           {/* Back to Dashboard */}
           <button 
-            onClick={() => window.location.href = '/dashboard'}
+            onClick={() => navigate('/dashboard')}
             className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors mb-4 font-body text-sm"
           >
             <ChevronLeft className="h-4 w-4" />
