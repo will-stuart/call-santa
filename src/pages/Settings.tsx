@@ -73,12 +73,18 @@ const Settings = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleteConfirmText, setDeleteConfirmText] = useState("");
 
-  // Refresh subscription status and usage when page loads
+  // Refresh subscription status when page loads
   useEffect(() => {
     refresh();
-    loadUsage();
     fetchEntries();
   }, [refresh, user]);
+
+  // Load usage AFTER subscription status is known
+  useEffect(() => {
+    if (!isLoading) {
+      loadUsage();
+    }
+  }, [isLoading, isPremium]);
 
   const loadUsage = async () => {
     // Only show loading spinner on initial load (when no data exists)
