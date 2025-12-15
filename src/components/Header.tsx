@@ -14,7 +14,7 @@ interface HeaderProps {
 const Header = ({ showAuthActions = false }: HeaderProps) => {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
-  const { isPremium } = useSubscription();
+  const { isPremium, isLoading: isSubscriptionLoading } = useSubscription();
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
   const handleSignOut = async () => {
@@ -38,19 +38,21 @@ const Header = ({ showAuthActions = false }: HeaderProps) => {
         <div className="flex items-center gap-2">
           {showAuthActions && user ? (
             <>
-              {isPremium ? (
-                <span className="bg-accent text-accent-foreground text-xs font-display px-3 py-1 rounded-full mr-2">
-                  ✨ Season Pass
-                </span>
-              ) : (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowUpgradeModal(true)}
-                  className="text-accent hover:text-accent hover:bg-accent/10 font-display text-xs gap-1"
-                >
-                  <Crown className="h-4 w-4" /> Upgrade
-                </Button>
+              {!isSubscriptionLoading && (
+                isPremium ? (
+                  <span className="bg-accent text-accent-foreground text-xs font-display px-3 py-1 rounded-full mr-2">
+                    ✨ Season Pass
+                  </span>
+                ) : (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowUpgradeModal(true)}
+                    className="text-accent hover:text-accent hover:bg-accent/10 font-display text-xs gap-1"
+                  >
+                    <Crown className="h-4 w-4" /> Upgrade
+                  </Button>
+                )
               )}
               <Button
                 variant="ghost"
