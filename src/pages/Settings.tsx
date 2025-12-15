@@ -33,6 +33,7 @@ import { Crown, Star, Loader2, Phone, Clock, BarChart3, BookOpen, Plus, Pencil, 
 import { toast } from "sonner";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { SettingsSkeleton } from "@/components/SettingsSkeleton";
 
 interface KnowledgeEntry {
   id: string;
@@ -330,6 +331,14 @@ const Settings = () => {
             </h1>
           </div>
 
+          {/* Skeleton Loading State */}
+          {(isLoading || isLoadingUsage || isLoadingKnowledge) && !usage && (
+            <SettingsSkeleton />
+          )}
+
+          {/* Content - only show when initial load is complete */}
+          {!(isLoading || isLoadingUsage || isLoadingKnowledge) || usage ? (
+            <>
           {/* Subscription Card */}
           <Card className="bg-card/80 backdrop-blur border-border mb-6">
             <CardHeader>
@@ -650,6 +659,8 @@ const Settings = () => {
               </div>
             </CardContent>
           </Card>
+            </>
+          ) : null}
         </div>
       </div>
 
