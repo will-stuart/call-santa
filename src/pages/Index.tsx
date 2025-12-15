@@ -15,7 +15,7 @@ import { SeasonPassModal } from "@/components/SeasonPassModal";
 const Index = () => {
   const { callStatus, isSpeaking, startCall, endCall } = useSantaCall();
   const { checkCallLimits } = useCallLimits();
-  const { isLoading: isSubscriptionLoading, isPremium } = useSubscription();
+  const { isLoading: isSubscriptionLoading, isPremium, subscriptionEnd } = useSubscription();
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [limitMessage, setLimitMessage] = useState<string>("");
   
@@ -33,7 +33,7 @@ const Index = () => {
     
     const loadUsage = async () => {
       try {
-        const limits = await checkCallLimits();
+        const limits = await checkCallLimits(isPremium, subscriptionEnd);
         setUsage({
           callsUsed: limits.callsUsed,
           callsLimit: limits.callsLimit,
@@ -46,7 +46,7 @@ const Index = () => {
     };
     
     loadUsage();
-  }, [checkCallLimits, isSubscriptionLoading, isPremium]);
+  }, [checkCallLimits, isSubscriptionLoading, isPremium, subscriptionEnd]);
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden flex flex-col">
