@@ -17,7 +17,7 @@ const Terms = () => {
           </div>
           
           <p className="text-muted-foreground mb-8 font-body">
-            Last updated: December 2024
+            Last updated: December 2025
           </p>
 
           <div className="space-y-8 text-foreground font-body">
