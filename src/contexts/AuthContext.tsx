@@ -31,14 +31,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     // THEN check for existing session and validate it
     const validateSession = async () => {
-      const { data: { session }, error } = await supabase.auth.getSession();
+      const { data: { session } } = await supabase.auth.getSession();
       
       if (session) {
         // Verify the user actually exists by making a test call
         const { error: userError } = await supabase.auth.getUser();
         if (userError) {
-          console.log('[Auth] Session invalid, user not found. Signing out...');
-          await supabase.auth.signOut();
+          console.log('[Auth] Session invalid, user not found. Force clearing local session...');
+          // Force sign out - ignore errors since user doesn't exist anyway
+          try {
+            await supabase.auth.signOut({ scope: 'local' });
+          } catch {
+            // Clear local storage manually if signOut fails
+            localStorage.removeItem('sb-rlojojqliiveizeiizyp-auth-token');
+          }
           setSession(null);
           setUser(null);
           setLoading(false);
