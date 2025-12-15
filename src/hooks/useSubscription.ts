@@ -9,7 +9,7 @@ interface SubscriptionState {
 }
 
 export const useSubscription = () => {
-  const { user, session } = useAuth();
+  const { user, session, loading: authLoading } = useAuth();
   const [state, setState] = useState<SubscriptionState>({
     status: 'loading',
     subscriptionEnd: null,
@@ -17,6 +17,11 @@ export const useSubscription = () => {
   });
 
   const checkSubscription = useCallback(async () => {
+    // Wait for auth to finish loading before checking subscription
+    if (authLoading) {
+      return;
+    }
+    
     if (!user || !session) {
       setState({ status: 'free', subscriptionEnd: null, isLoading: false });
       return;
@@ -40,7 +45,7 @@ export const useSubscription = () => {
       console.error('Error checking subscription:', error);
       setState({ status: 'free', subscriptionEnd: null, isLoading: false });
     }
-  }, [user, session]);
+  }, [user, session, authLoading]);
 
   useEffect(() => {
     checkSubscription();
