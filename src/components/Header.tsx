@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/hooks/useSubscription";
 import { SeasonPassModal } from "@/components/SeasonPassModal";
-import { LogIn, LogOut, Settings, Crown } from "lucide-react";
+import { LogIn, LogOut, Settings, Crown, Check } from "lucide-react";
 import { useLocation } from "react-router-dom";
 
 interface HeaderProps {
@@ -40,8 +40,8 @@ const Header = ({ showAuthActions = false }: HeaderProps) => {
             <>
               {!isSubscriptionLoading && (
                 isPremium ? (
-                  <span className="bg-accent text-accent-foreground text-xs font-display px-3 py-1 rounded-full mr-2">
-                    ✨ Season Pass
+                  <span className="bg-accent text-accent-foreground text-xs font-display px-3 py-1 rounded-full mr-2 flex items-center gap-1">
+                    <Check className="h-3 w-3" /> Season Pass
                   </span>
                 ) : (
                   <Button
