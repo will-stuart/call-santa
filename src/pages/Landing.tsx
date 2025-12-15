@@ -38,7 +38,7 @@ const Landing = () => {
             </Button>
           </div>
           <p className="mt-4 text-sm text-muted-foreground font-body">
-            ✨ 1 free call included • No credit card required
+            ✨ 3 free calls included • No credit card required
           </p>
         </div>
       </section>
