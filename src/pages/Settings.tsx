@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useCallLimits } from "@/hooks/useCallLimits";
@@ -17,8 +18,18 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { SeasonPassModal } from "@/components/SeasonPassModal";
-import { Crown, Star, Loader2, Phone, Clock, BarChart3, BookOpen, Plus, Pencil, Trash2, Lock, ChevronLeft, Ticket } from "lucide-react";
+import { Crown, Star, Loader2, Phone, Clock, BarChart3, BookOpen, Plus, Pencil, Trash2, Lock, ChevronLeft, Ticket, Download, UserX } from "lucide-react";
 import { toast } from "sonner";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -34,7 +45,8 @@ const MAX_CONTEXT_LENGTH = 500;
 const FREE_KNOWLEDGE_LIMIT = 1;
 
 const Settings = () => {
-  const { user } = useAuth();
+  const navigate = useNavigate();
+  const { user, signOut, session } = useAuth();
   const { status, subscriptionEnd, isPremium, subscribe, manageSubscription, isLoading, refresh } = useSubscription();
   const { checkCallLimits, PREMIUM_CALLS_LIMIT, PREMIUM_MINUTES_LIMIT, FREE_CALLS_LIMIT, FREE_MINUTES_LIMIT } = useCallLimits();
   const [isSubscribing, setIsSubscribing] = useState(false);
@@ -53,6 +65,12 @@ const Settings = () => {
   const [editingEntry, setEditingEntry] = useState<KnowledgeEntry | null>(null);
   const [formData, setFormData] = useState({ name: "", context: "" });
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+
+  // Account management state
+  const [isExporting, setIsExporting] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
 
   // Refresh subscription status and usage when page loads
   useEffect(() => {
@@ -218,6 +236,69 @@ const Settings = () => {
   const handleContextChange = (value: string) => {
     if (value.length <= MAX_CONTEXT_LENGTH) {
       setFormData({ ...formData, context: value });
+    }
+  };
+
+  // Export data handler
+  const handleExportData = async () => {
+    if (!session) return;
+    setIsExporting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('export-data', {
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
+      if (error) throw error;
+      
+      // Download as JSON file
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `call-santa-data-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      toast.success("Data exported successfully!");
+    } catch (error) {
+      console.error("Export error:", error);
+      toast.error("Failed to export data");
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  // Delete account handler
+  const handleDeleteAccount = async () => {
+    if (!session || deleteConfirmText !== "DELETE") return;
+    setIsDeleting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('delete-account', {
+        headers: { Authorization: `Bearer ${session.access_token}` },
+      });
+      
+      if (error) throw error;
+      
+      if (data?.error === 'active_subscription') {
+        toast.error("Please cancel your subscription first");
+        setShowDeleteDialog(false);
+        setDeleteConfirmText("");
+        // Open Stripe portal to cancel
+        await manageSubscription();
+        return;
+      }
+      
+      if (data?.success) {
+        toast.success("Account deleted successfully");
+        await signOut();
+        navigate('/');
+      }
+    } catch (error) {
+      console.error("Delete error:", error);
+      toast.error("Failed to delete account");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -514,6 +595,61 @@ const Settings = () => {
               )}
             </CardContent>
           </Card>
+
+          {/* Account & Data Card */}
+          <Card className="bg-card/80 backdrop-blur border-border mt-6">
+            <CardHeader>
+              <div className="space-y-1.5">
+                <CardTitle className="text-foreground font-display flex items-center gap-2">
+                  <UserX className="h-5 w-5" />
+                  Account & Data
+                </CardTitle>
+                <CardDescription className="text-muted-foreground">
+                  Export your data or delete your account
+                </CardDescription>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {/* Export Data */}
+              <div className="flex items-center justify-between p-4 rounded-lg bg-muted/30 border border-border">
+                <div>
+                  <h3 className="font-display font-semibold text-foreground text-sm">Export My Data</h3>
+                  <p className="text-xs text-muted-foreground">Download all your data as a JSON file</p>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleExportData}
+                  disabled={isExporting}
+                  className="border-border text-foreground hover:bg-card"
+                >
+                  {isExporting ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <>
+                      <Download className="h-4 w-4 mr-1" /> Export
+                    </>
+                  )}
+                </Button>
+              </div>
+
+              {/* Delete Account */}
+              <div className="flex items-center justify-between p-4 rounded-lg bg-destructive/10 border border-destructive/20">
+                <div>
+                  <h3 className="font-display font-semibold text-foreground text-sm">Delete Account</h3>
+                  <p className="text-xs text-muted-foreground">Permanently delete your account and all data</p>
+                </div>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => setShowDeleteDialog(true)}
+                  className="bg-destructive hover:bg-destructive/90"
+                >
+                  <Trash2 className="h-4 w-4 mr-1" /> Delete
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
 
@@ -582,6 +718,60 @@ const Settings = () => {
       </Dialog>
 
       <SeasonPassModal open={showUpgradeModal} onOpenChange={setShowUpgradeModal} />
+
+      {/* Delete Account Confirmation Dialog */}
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent className="bg-card border-border">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-foreground font-display">
+              Delete Your Account?
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-muted-foreground space-y-3">
+              <p>
+                This action is <strong className="text-destructive">permanent and cannot be undone</strong>. 
+                All your data will be deleted, including:
+              </p>
+              <ul className="list-disc list-inside text-sm space-y-1">
+                <li>Your profile and account</li>
+                <li>All Santa's Knowledge entries</li>
+                <li>Call history and usage data</li>
+              </ul>
+              {isPremium && (
+                <p className="text-accent font-medium">
+                  Note: You have an active subscription. You'll need to cancel it first.
+                </p>
+              )}
+              <p className="pt-2">
+                Type <strong>DELETE</strong> to confirm:
+              </p>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <Input
+            value={deleteConfirmText}
+            onChange={(e) => setDeleteConfirmText(e.target.value)}
+            placeholder="Type DELETE to confirm"
+            className="bg-input border-border text-foreground"
+          />
+          <AlertDialogFooter>
+            <AlertDialogCancel 
+              onClick={() => setDeleteConfirmText("")}
+              className="border-border text-foreground"
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteAccount}
+              disabled={deleteConfirmText !== "DELETE" || isDeleting}
+              className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
+            >
+              {isDeleting ? (
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+              ) : null}
+              Delete Account
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <Footer />
     </div>
