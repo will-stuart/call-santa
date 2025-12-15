@@ -621,7 +621,7 @@ const Settings = () => {
                   size="sm"
                   onClick={handleExportData}
                   disabled={isExporting}
-                  className="border-border text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary"
+                  className="border-border text-foreground hover:bg-foreground hover:text-background hover:border-foreground"
                 >
                   {isExporting ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
