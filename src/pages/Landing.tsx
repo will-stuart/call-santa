@@ -112,13 +112,13 @@ const Landing = () => {
                 <div className="text-4xl font-display font-bold text-foreground mb-4">$0</div>
                 <ul className="text-left space-y-3 text-muted-foreground font-body text-sm mb-6 flex-1">
                   <li className="flex items-center gap-2">
-                    <Star className="h-4 w-4 text-primary" /> 1 call with Santa
+                    <Star className="h-4 w-4 text-primary" /> 3 calls with Santa
                   </li>
                   <li className="flex items-center gap-2">
-                    <Star className="h-4 w-4 text-primary" /> 1 knowledge entry
+                    <Star className="h-4 w-4 text-primary" /> 3 minutes total
                   </li>
                   <li className="flex items-center gap-2">
-                    <Star className="h-4 w-4 text-primary" /> Experience the magic
+                    <Star className="h-4 w-4 text-primary" /> 1 Santa Knowledge entry
                   </li>
                 </ul>
                 <Button
@@ -138,19 +138,19 @@ const Landing = () => {
               <CardContent className="pt-8 pb-8 h-full flex flex-col">
                 <h3 className="text-xl font-display font-semibold text-foreground mb-2">Season Pass</h3>
                 <div className="text-4xl font-display font-bold text-foreground mb-1">$30</div>
-                <p className="text-sm text-muted-foreground mb-4">one-time for the holidays</p>
+                <p className="text-sm text-muted-foreground mb-4">per month</p>
                 <ul className="text-left space-y-3 text-muted-foreground font-body text-sm mb-6 flex-1">
                   <li className="flex items-center gap-2">
-                    <Star className="h-4 w-4 text-accent" /> Unlimited calls through Dec 31
+                    <Star className="h-4 w-4 text-accent" /> 30 calls per month
                   </li>
                   <li className="flex items-center gap-2">
-                    <Star className="h-4 w-4 text-accent" /> Unlimited knowledge entries
+                    <Star className="h-4 w-4 text-accent" /> 100 minutes per month
                   </li>
                   <li className="flex items-center gap-2">
-                    <Star className="h-4 w-4 text-accent" /> Multiple children supported
+                    <Star className="h-4 w-4 text-accent" /> No cap on Santa knowledge
                   </li>
                   <li className="flex items-center gap-2">
-                    <Shield className="h-4 w-4 text-accent" /> Safe & family-friendly
+                    <Star className="h-4 w-4 text-accent" /> Multiple people supported
                   </li>
                 </ul>
                 <Button
