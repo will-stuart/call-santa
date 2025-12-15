@@ -39,6 +39,28 @@ serve(async (req) => {
     if (!user?.email) throw new Error("User not authenticated or email not available");
     logStep("User authenticated", { userId: user.id, email: user.email });
 
+    // Premium override for specific emails (e.g., testing/internal accounts)
+    const premiumOverrideEmails = ['will.stuart1@gmail.com'];
+    
+    if (premiumOverrideEmails.includes(user.email)) {
+      logStep("Premium override applied", { email: user.email });
+      
+      // Update database to premium status
+      await supabaseClient
+        .from('subscriptions')
+        .update({ status: 'premium' })
+        .eq('user_id', user.id);
+      
+      return new Response(JSON.stringify({
+        subscribed: true,
+        status: "premium",
+        subscription_end: null
+      }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 200,
+      });
+    }
+
     const stripe = new Stripe(stripeKey, { apiVersion: "2025-08-27.basil" });
     const customers = await stripe.customers.list({ email: user.email, limit: 1 });
     
