@@ -5,6 +5,7 @@ import { SantaStatus } from "@/components/SantaStatus";
 import { DashboardSkeleton } from "@/components/DashboardSkeleton";
 import { useSantaCall } from "@/hooks/useSantaCall";
 import { useCallLimits } from "@/hooks/useCallLimits";
+import { useSubscription } from "@/hooks/useSubscription";
 import { Phone, Clock } from "lucide-react";
 import { toast } from "sonner";
 import Header from "@/components/Header";
@@ -14,6 +15,7 @@ import { SeasonPassModal } from "@/components/SeasonPassModal";
 const Index = () => {
   const { callStatus, isSpeaking, startCall, endCall } = useSantaCall();
   const { checkCallLimits } = useCallLimits();
+  const { isLoading: isSubscriptionLoading, isPremium } = useSubscription();
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [limitMessage, setLimitMessage] = useState<string>("");
   
@@ -25,8 +27,10 @@ const Index = () => {
     minutesLimit: number;
   } | null>(null);
 
-  // Load usage on mount
+  // Load usage only after subscription status is known
   useEffect(() => {
+    if (isSubscriptionLoading) return;
+    
     const loadUsage = async () => {
       try {
         const limits = await checkCallLimits();
@@ -42,7 +46,7 @@ const Index = () => {
     };
     
     loadUsage();
-  }, [checkCallLimits]);
+  }, [checkCallLimits, isSubscriptionLoading, isPremium]);
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden flex flex-col">
