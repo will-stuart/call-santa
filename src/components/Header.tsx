@@ -6,6 +6,7 @@ import { useSubscription } from "@/hooks/useSubscription";
 import { SeasonPassModal } from "@/components/SeasonPassModal";
 import { LogIn, LogOut, Settings, Crown, Check } from "lucide-react";
 import { useLocation } from "react-router-dom";
+import santaImage from "@/assets/santa.png";
 
 interface HeaderProps {
   showAuthActions?: boolean;
@@ -30,7 +31,7 @@ const Header = ({ showAuthActions = false }: HeaderProps) => {
           onClick={() => navigate(user ? "/dashboard" : "/")}
           className="flex items-center gap-2 hover:opacity-80 transition-opacity"
         >
-          <span className="text-2xl">🎅</span>
+          <img src={santaImage} alt="Santa" className="h-8 w-8 object-contain" />
           <span className="font-display font-bold text-foreground">Call Santa</span>
         </button>
 

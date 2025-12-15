@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { Phone, Sparkles, Heart, Shield, Star } from "lucide-react";
 import Header from "@/components/Header";
+import santaImage from "@/assets/santa.png";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const Landing = () => {
       {/* Hero Section */}
       <section className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-16 pt-20">
         <div className="text-center max-w-4xl mx-auto">
-          <div className="text-7xl md:text-8xl mb-6">🎅</div>
+          <img src={santaImage} alt="Santa" className="w-32 h-32 md:w-40 md:h-40 object-contain mb-6" />
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold text-foreground mb-6 leading-tight">
             Don't just talk to Santa.
             <br />
