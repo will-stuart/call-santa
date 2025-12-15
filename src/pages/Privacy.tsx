@@ -1,14 +1,15 @@
 import { Shield, Lock, Eye, Trash2, Baby } from 'lucide-react';
 import { Snowfall } from '@/components/Snowfall';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 const Privacy = () => {
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
+    <div className="min-h-screen bg-background relative overflow-hidden flex flex-col">
       <Snowfall />
       <Header showAuthActions />
       
-      <div className="relative z-10 max-w-3xl mx-auto px-4 pt-24 pb-8">
+      <div className="relative z-10 flex-1 max-w-3xl mx-auto px-4 pt-24 pb-8 w-full">
         <div className="bg-card/90 backdrop-blur rounded-2xl p-8 border border-border">
           <div className="flex items-center gap-3 mb-6">
             <Shield className="h-8 w-8 text-primary" />
@@ -140,6 +141,8 @@ const Privacy = () => {
           </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 };

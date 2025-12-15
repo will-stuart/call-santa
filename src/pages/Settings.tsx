@@ -21,6 +21,7 @@ import { SeasonPassModal } from "@/components/SeasonPassModal";
 import { Crown, Star, Loader2, Phone, Clock, BarChart3, BookOpen, Plus, Pencil, Trash2, Lock, ChevronLeft, Ticket } from "lucide-react";
 import { toast } from "sonner";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 interface KnowledgeEntry {
   id: string;
@@ -224,7 +225,7 @@ const Settings = () => {
   const minutesPercent = usage ? Math.min((usage.minutesUsed / usage.minutesLimit) * 100, 100) : 0;
 
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
+    <div className="min-h-screen bg-background relative overflow-hidden flex flex-col">
       <Snowfall />
 
       <Header showAuthActions />
@@ -581,6 +582,8 @@ const Settings = () => {
       </Dialog>
 
       <SeasonPassModal open={showUpgradeModal} onOpenChange={setShowUpgradeModal} />
+
+      <Footer />
     </div>
   );
 };
