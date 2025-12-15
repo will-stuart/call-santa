@@ -107,8 +107,11 @@ const Index = () => {
         {/* Speaking status */}
         <SantaStatus isSpeaking={isSpeaking} isConnected={callStatus === "connected"} />
 
-        {/* Usage display */}
+        {/* Usage display - only show when running low (80%+) */}
         {usage && callStatus === "idle" && (
+          (usage.callsUsed / usage.callsLimit) >= 0.8 || 
+          (usage.minutesUsed / usage.minutesLimit) >= 0.8
+        ) && (
           <div className="mt-8 flex gap-6 text-sm text-muted-foreground font-body">
             <div className="flex items-center gap-2">
               <Phone className="h-4 w-4" />
