@@ -97,6 +97,22 @@ serve(async (req) => {
       }
     } else {
       logStep("No active subscription found");
+      
+      // Reset subscription status in database when no active subscription
+      const { error: updateError } = await supabaseClient
+        .from('subscriptions')
+        .update({
+          status: 'free',
+          stripe_subscription_id: null,
+          current_period_end: null,
+        })
+        .eq('user_id', user.id);
+      
+      if (updateError) {
+        logStep("Error resetting subscription status", { error: updateError.message });
+      } else {
+        logStep("Database reset to free status");
+      }
     }
 
     return new Response(JSON.stringify({
