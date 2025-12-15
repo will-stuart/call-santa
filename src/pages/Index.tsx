@@ -1,9 +1,9 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Snowfall } from "@/components/Snowfall";
 import { CallButton } from "@/components/CallButton";
 import { SantaStatus } from "@/components/SantaStatus";
 import { DashboardSkeleton } from "@/components/DashboardSkeleton";
-import { useSantaCall, CallLimitExceeded } from "@/hooks/useSantaCall";
+import { useSantaCall } from "@/hooks/useSantaCall";
 import { useCallLimits } from "@/hooks/useCallLimits";
 import { Phone, Clock } from "lucide-react";
 import { toast } from "sonner";
@@ -14,7 +14,6 @@ import { SeasonPassModal } from "@/components/SeasonPassModal";
 const Index = () => {
   const { callStatus, isSpeaking, startCall, endCall } = useSantaCall();
   const { checkCallLimits } = useCallLimits();
-  const hasShownToast = useRef(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [limitMessage, setLimitMessage] = useState<string>("");
   
@@ -37,21 +36,6 @@ const Index = () => {
           minutesUsed: limits.minutesUsed,
           minutesLimit: limits.minutesLimit,
         });
-        
-        // Show warning if approaching limits (80%+) - only once
-        if (!hasShownToast.current) {
-          const callsPercent = (limits.callsUsed / limits.callsLimit) * 100;
-          const minutesPercent = (limits.minutesUsed / limits.minutesLimit) * 100;
-          
-          if (callsPercent >= 80 && callsPercent < 100) {
-            toast.warning(`You've used ${limits.callsUsed} of ${limits.callsLimit} calls this period.`);
-            hasShownToast.current = true;
-          }
-          if (minutesPercent >= 80 && minutesPercent < 100) {
-            toast.warning(`You've used ${limits.minutesUsed} of ${limits.minutesLimit} minutes this period.`);
-            hasShownToast.current = true;
-          }
-        }
       } finally {
         setIsLoading(false);
       }
