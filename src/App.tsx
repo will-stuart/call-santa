@@ -10,6 +10,7 @@ import Auth from "./pages/Auth";
 import Install from "./pages/Install";
 import Settings from "./pages/Settings";
 import Landing from "./pages/Landing";
+import Privacy from "./pages/Privacy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="/" element={<HomeRoute />} />
             <Route path="/welcome" element={<Navigate to="/" replace />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/privacy" element={<Privacy />} />
             <Route path="/install" element={<Install />} />
             <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
             <Route path="/children" element={<Navigate to="/settings" replace />} />
