@@ -3,6 +3,7 @@ import { useConversation } from "@elevenlabs/react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCallLimits } from "./useCallLimits";
+import { useSubscription } from "./useSubscription";
 import { toast } from "sonner";
 
 export type CallStatus = "idle" | "ringing" | "connected" | "ending";
@@ -30,6 +31,7 @@ export function useSantaCall() {
   const [childrenContext, setChildrenContext] = useState<string>("");
   const { user } = useAuth();
   const { checkCallLimits, logCall, updateCallDuration } = useCallLimits();
+  const { isPremium, subscriptionEnd } = useSubscription();
   
   // Track call timing
   const callStartTime = useRef<number | null>(null);
@@ -109,8 +111,8 @@ export function useSantaCall() {
   });
 
   const startCall = useCallback(async (): Promise<CallLimitExceeded> => {
-    // Check call limits first
-    const limits = await checkCallLimits();
+    // Check call limits first (pass subscription state)
+    const limits = await checkCallLimits(isPremium, subscriptionEnd);
     
     if (!limits.canCall) {
       if (limits.callsUsed >= limits.callsLimit) {
@@ -181,7 +183,7 @@ IMPORTANT: If you receive knowledge below, use that information NATURALLY in con
       toast.error("Could not connect to Santa. Make sure your microphone is enabled!");
       return { exceeded: false };
     }
-  }, [conversation, ringAudio, childrenContext, checkCallLimits, logCall]);
+  }, [conversation, ringAudio, childrenContext, checkCallLimits, logCall, isPremium, subscriptionEnd]);
 
   const endCall = useCallback(async () => {
     setCallStatus("ending");

@@ -92,7 +92,7 @@ const Settings = () => {
       setIsLoadingUsage(true);
     }
     try {
-      const limits = await checkCallLimits();
+      const limits = await checkCallLimits(isPremium, subscriptionEnd);
       setUsage({
         callsUsed: limits.callsUsed,
         callsLimit: limits.callsLimit,

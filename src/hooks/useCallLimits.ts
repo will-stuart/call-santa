@@ -1,7 +1,6 @@
 import { useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { useSubscription } from "./useSubscription";
 
 interface CallLimits {
   canCall: boolean;
@@ -20,10 +19,12 @@ const PREMIUM_MINUTES_LIMIT = 100;
 
 export function useCallLimits() {
   const { user } = useAuth();
-  const { isPremium, subscriptionEnd } = useSubscription();
   const [isChecking, setIsChecking] = useState(false);
 
-  const checkCallLimits = useCallback(async (): Promise<CallLimits> => {
+  const checkCallLimits = useCallback(async (
+    isPremium: boolean = false,
+    subscriptionEnd: string | null = null
+  ): Promise<CallLimits> => {
     if (!user) {
       return { canCall: false, callsUsed: 0, callsLimit: 0, minutesUsed: 0, minutesLimit: 0, isPremium: false };
     }
@@ -65,7 +66,7 @@ export function useCallLimits() {
     } finally {
       setIsChecking(false);
     }
-  }, [user, isPremium, subscriptionEnd]);
+  }, [user]);
 
   const logCall = useCallback(async (): Promise<string | null> => {
     if (!user) return null;
