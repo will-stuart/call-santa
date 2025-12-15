@@ -1,24 +1,22 @@
-import { Shield, Lock, Eye, Trash2, Baby } from 'lucide-react';
-import { Snowfall } from '@/components/Snowfall';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+import { Shield, Lock, Eye, Trash2, Baby } from "lucide-react";
+import { Snowfall } from "@/components/Snowfall";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 const Privacy = () => {
   return (
     <div className="min-h-screen bg-background relative overflow-hidden flex flex-col">
       <Snowfall />
       <Header showAuthActions />
-      
+
       <div className="relative z-10 flex-1 max-w-3xl mx-auto px-4 pt-24 pb-8 w-full">
         <div className="bg-card/90 backdrop-blur rounded-2xl p-8 border border-border">
           <div className="flex items-center gap-3 mb-6">
             <Shield className="h-8 w-8 text-primary" />
             <h1 className="text-3xl font-display text-foreground">Privacy Policy</h1>
           </div>
-          
-          <p className="text-muted-foreground mb-8 font-body">
-            Last updated: December 2024
-          </p>
+
+          <p className="text-muted-foreground mb-8 font-body">Last updated: December 2025</p>
 
           <div className="space-y-8 text-foreground font-body">
             {/* Introduction */}
@@ -28,9 +26,9 @@ const Privacy = () => {
                 Our Commitment to Privacy
               </h2>
               <p className="text-muted-foreground leading-relaxed">
-                Call Santa is committed to protecting the privacy of our users, especially children. 
-                We understand that you're sharing personal information about your family to create 
-                magical experiences, and we take that responsibility seriously.
+                Call Santa is committed to protecting the privacy of our users, especially children. We understand that
+                you're sharing personal information about your family to create magical experiences, and we take that
+                responsibility seriously.
               </p>
             </section>
 
@@ -41,9 +39,15 @@ const Privacy = () => {
                 What Data We Collect
               </h2>
               <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-2">
-                <li><strong>Account Information:</strong> Email address and password for authentication</li>
-                <li><strong>Knowledge Entries:</strong> Names and contextual information you provide about family members</li>
-                <li><strong>Usage Data:</strong> Call counts and duration for managing your subscription limits</li>
+                <li>
+                  <strong>Account Information:</strong> Email address and password for authentication
+                </li>
+                <li>
+                  <strong>Knowledge Entries:</strong> Names and contextual information you provide about family members
+                </li>
+                <li>
+                  <strong>Usage Data:</strong> Call counts and duration for managing your subscription limits
+                </li>
               </ul>
             </section>
 
@@ -68,9 +72,9 @@ const Privacy = () => {
             <section>
               <h2 className="text-xl font-display mb-3">Your Data Is Never Used for AI Training</h2>
               <p className="text-muted-foreground leading-relaxed">
-                We have configured our AI voice partner to explicitly exclude all user data from 
-                model training. Your children's names, interests, wishes, and conversation content 
-                are <strong>never</strong> used to train or improve AI models.
+                We have configured our AI voice partner to explicitly exclude all user data from model training. Your
+                children's names, interests, wishes, and conversation content are <strong>never</strong> used to train
+                or improve AI models.
               </p>
             </section>
 
@@ -98,9 +102,13 @@ const Privacy = () => {
                 We share limited data only with essential service providers:
               </p>
               <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-2">
-                <li><strong>ElevenLabs:</strong> Receives knowledge context during calls to personalize 
-                  Santa's responses. Configured for zero retention—no data is stored.</li>
-                <li><strong>Stripe:</strong> Processes payments securely. We never see your full card details.</li>
+                <li>
+                  <strong>ElevenLabs:</strong> Receives knowledge context during calls to personalize Santa's responses.
+                  Configured for zero retention—no data is stored.
+                </li>
+                <li>
+                  <strong>Stripe:</strong> Processes payments securely. We never see your full card details.
+                </li>
               </ul>
             </section>
 
@@ -134,8 +142,8 @@ const Privacy = () => {
             <section>
               <h2 className="text-xl font-display mb-3">Contact Us</h2>
               <p className="text-muted-foreground leading-relaxed">
-                If you have questions about this privacy policy or our data practices, 
-                please contact us at privacy@callsanta.app
+                If you have questions about this privacy policy or our data practices, please contact us at
+                privacy@callsanta.app
               </p>
             </section>
           </div>
