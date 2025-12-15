@@ -66,11 +66,11 @@ const Terms = () => {
                 Subscription & Payment
               </h2>
               <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-2">
-                <li><strong>Free Plan:</strong> Limited calls and minutes per account</li>
-                <li><strong>Season Pass:</strong> Monthly subscription with increased limits</li>
+                <li><strong>Free Plan:</strong> 3 calls with 2 minutes total duration per account</li>
+                <li><strong>Season Pass:</strong> $30/month recurring subscription with increased limits (30 calls, 100 minutes per billing period)</li>
                 <li>Payments are processed securely through Stripe</li>
-                <li>You may cancel your subscription at any time from the Settings page</li>
-                <li>Refunds are handled on a case-by-case basis</li>
+                <li>You may cancel your subscription at any time from the Settings page - your access continues until the end of your current billing period</li>
+                <li><strong>No refunds:</strong> When you cancel, you retain access until the end of your paid period but will not be refunded for unused time</li>
               </ul>
             </section>
 
