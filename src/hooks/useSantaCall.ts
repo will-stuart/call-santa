@@ -131,8 +131,11 @@ export function useSantaCall() {
       // Request microphone permission
       await navigator.mediaDevices.getUserMedia({ audio: true });
 
-      // Get token from edge function
-      const { data, error } = await supabase.functions.invoke("elevenlabs-conversation-token");
+      // Get auth session and token from edge function
+      const { data: { session } } = await supabase.auth.getSession();
+      const { data, error } = await supabase.functions.invoke("elevenlabs-conversation-token", {
+        headers: { Authorization: `Bearer ${session?.access_token}` },
+      });
 
       if (error || !data?.token) {
         console.error("Token error:", error);
