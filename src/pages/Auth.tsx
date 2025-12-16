@@ -205,7 +205,7 @@ const Auth = () => {
           </div>
           
           <p className="mt-6 text-center text-sm text-muted-foreground font-body">
-            🎄 1 free call included, then $30 Season Pass 🎄
+            🎄 3 free calls included, then $30/mo Season Pass 🎄
           </p>
         </CardContent>
       </Card>
