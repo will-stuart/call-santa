@@ -16,21 +16,18 @@ export type Database = {
     Tables: {
       call_logs: {
         Row: {
-          clerk_user_id: string | null
           duration_seconds: number | null
           id: string
           started_at: string
           user_id: string
         }
         Insert: {
-          clerk_user_id?: string | null
           duration_seconds?: number | null
           id?: string
           started_at?: string
           user_id: string
         }
         Update: {
-          clerk_user_id?: string | null
           duration_seconds?: number | null
           id?: string
           started_at?: string
@@ -40,7 +37,6 @@ export type Database = {
       }
       children: {
         Row: {
-          clerk_user_id: string | null
           context: string | null
           created_at: string
           id: string
@@ -49,7 +45,6 @@ export type Database = {
           user_id: string
         }
         Insert: {
-          clerk_user_id?: string | null
           context?: string | null
           created_at?: string
           id?: string
@@ -58,7 +53,6 @@ export type Database = {
           user_id: string
         }
         Update: {
-          clerk_user_id?: string | null
           context?: string | null
           created_at?: string
           id?: string
@@ -70,7 +64,6 @@ export type Database = {
       }
       profiles: {
         Row: {
-          clerk_user_id: string | null
           created_at: string
           email: string | null
           id: string
@@ -78,7 +71,6 @@ export type Database = {
           user_id: string
         }
         Insert: {
-          clerk_user_id?: string | null
           created_at?: string
           email?: string | null
           id?: string
@@ -86,7 +78,6 @@ export type Database = {
           user_id: string
         }
         Update: {
-          clerk_user_id?: string | null
           created_at?: string
           email?: string | null
           id?: string
@@ -97,7 +88,6 @@ export type Database = {
       }
       subscriptions: {
         Row: {
-          clerk_user_id: string | null
           created_at: string
           current_period_end: string | null
           current_period_start: string | null
@@ -109,7 +99,6 @@ export type Database = {
           user_id: string
         }
         Insert: {
-          clerk_user_id?: string | null
           created_at?: string
           current_period_end?: string | null
           current_period_start?: string | null
@@ -121,7 +110,6 @@ export type Database = {
           user_id: string
         }
         Update: {
-          clerk_user_id?: string | null
           created_at?: string
           current_period_end?: string | null
           current_period_start?: string | null
