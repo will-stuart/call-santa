@@ -171,7 +171,7 @@ const Landing = () => {
           <p className="text-2xl mb-2">🎄</p>
           <p className="text-muted-foreground font-body text-sm">Call Santa — Preserving the magic of Christmas</p>
           <p className="text-muted-foreground/50 font-body text-xs mt-4">
-            © 2024 Call Santa. Made with ❤️ for families everywhere.
+            © 2025 Call Santa. Made with ❤️ for families everywhere.
           </p>
         </div>
       </footer>
