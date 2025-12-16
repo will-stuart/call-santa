@@ -1,21 +1,13 @@
 import { useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-
-interface CallLimits {
-  canCall: boolean;
-  callsUsed: number;
-  callsLimit: number;
-  minutesUsed: number;
-  minutesLimit: number;
-  isPremium: boolean;
-}
-
-// Free: 3 calls, 2 minutes | Premium: 30 calls, 100 minutes
-const FREE_CALLS_LIMIT = 3;
-const FREE_MINUTES_LIMIT = 2;
-const PREMIUM_CALLS_LIMIT = 30;
-const PREMIUM_MINUTES_LIMIT = 100;
+import {
+  FREE_CALLS_LIMIT,
+  FREE_MINUTES_LIMIT,
+  PREMIUM_CALLS_LIMIT,
+  PREMIUM_MINUTES_LIMIT,
+} from "@/constants/limits";
+import type { CallLimits } from "@/types";
 
 export function useCallLimits() {
   const { user } = useAuth();
