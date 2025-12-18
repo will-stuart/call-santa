@@ -143,8 +143,8 @@ const Privacy = () => {
             <section>
               <h2 className="text-xl font-display mb-3">Contact Us</h2>
               <p className="text-muted-foreground leading-relaxed">
-                If you have questions about this privacy policy or our data practices, please contact us at
-                privacy@callsanta.app
+              If you have questions about this privacy policy or our data practices, please contact us at
+                northpole@callsanta.app
               </p>
             </section>
           </div>
