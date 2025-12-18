@@ -121,7 +121,7 @@ const Terms = () => {
                 Contact Us
               </h2>
               <p className="text-muted-foreground leading-relaxed">
-                If you have questions about these terms, please contact us at legal@callsanta.app
+                If you have questions about these terms, please contact us at northpole@callsanta.app
               </p>
             </section>
           </div>
