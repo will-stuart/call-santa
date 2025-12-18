@@ -60,6 +60,9 @@ serve(async (req) => {
       {
         headers: {
           "xi-api-key": ELEVENLABS_API_KEY,
+          // Privacy intent headers (documentation purposes - signals our data handling preferences)
+          "X-Client-Privacy-Request": "minimal-retention",
+          "X-Data-Usage": "no-training",
         },
       }
     );

@@ -61,10 +61,10 @@ const Privacy = () => {
                 <strong className="text-foreground">We do not store or retain any voice conversation data.</strong>
               </p>
               <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-2">
-                <li>Voice conversations are processed in real-time and immediately discarded</li>
-                <li>No audio recordings are saved or stored</li>
-                <li>Conversation transcripts are not retained</li>
-                <li>Our AI partner (ElevenLabs) is configured for zero data retention</li>
+                <li>Voice conversations are processed in real-time and immediately discarded by Call Santa</li>
+                <li>No audio recordings are saved or stored by our service</li>
+                <li>Conversation transcripts are not retained by Call Santa</li>
+                <li>Our voice partner (ElevenLabs) processes calls according to their commercial privacy policy</li>
               </ul>
             </section>
 
@@ -72,9 +72,9 @@ const Privacy = () => {
             <section>
               <h2 className="text-xl font-display mb-3">Your Data Is Never Used for AI Training</h2>
               <p className="text-muted-foreground leading-relaxed">
-                We have configured our AI voice partner to explicitly exclude all user data from model training. Your
-                children's names, interests, wishes, and conversation content are <strong>never</strong> used to train
-                or improve AI models.
+                Our AI voice partner (ElevenLabs) contractually commits to not using customer conversation data for AI
+                model training. Your children's names, interests, wishes, and conversation content are protected by
+                their commercial privacy policy and are <strong>never</strong> used to train or improve AI models.
               </p>
             </section>
 
@@ -104,7 +104,8 @@ const Privacy = () => {
               <ul className="list-disc list-inside text-muted-foreground space-y-2 ml-2">
                 <li>
                   <strong>ElevenLabs:</strong> Receives knowledge context during calls to personalize Santa's responses.
-                  Configured for zero retention—no data is stored.
+                  Processes conversations in real-time per their commercial privacy policy, which prohibits using
+                  customer data for AI training.
                 </li>
                 <li>
                   <strong>Stripe:</strong> Processes payments securely. We never see your full card details.
