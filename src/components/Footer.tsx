@@ -11,7 +11,7 @@ const Footer = () => {
           className="flex items-center gap-2 bg-primary/10 text-primary px-3 py-1.5 rounded-full text-sm font-display hover:bg-primary/20 transition-colors"
         >
           <Shield className="h-4 w-4" />
-          <span>Secure & Zero-Retention</span>
+          <span>Secure & Private</span>
         </Link>
 
         {/* Links */}
