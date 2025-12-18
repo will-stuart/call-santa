@@ -55,7 +55,7 @@ const Privacy = () => {
             <section className="bg-primary/10 rounded-xl p-6 border border-primary/20">
               <h2 className="text-xl font-display mb-3 flex items-center gap-2">
                 <Trash2 className="h-5 w-5 text-primary" />
-                Zero-Retention Voice Calls
+                Voice Call Privacy
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
                 <strong className="text-foreground">We do not store or retain any voice conversation data.</strong>
