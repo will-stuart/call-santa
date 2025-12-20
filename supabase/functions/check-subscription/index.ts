@@ -40,7 +40,12 @@ serve(async (req) => {
     logStep("User authenticated", { userId: user.id, email: user.email });
 
     // Premium override for specific emails (e.g., testing/internal accounts)
-    const premiumOverrideEmails = ['will.stuart1@gmail.com'];
+    // Configure via PREMIUM_OVERRIDE_EMAILS environment variable (comma-separated)
+    const premiumOverrideEmailsEnv = Deno.env.get("PREMIUM_OVERRIDE_EMAILS") || "";
+    const premiumOverrideEmails = premiumOverrideEmailsEnv
+      .split(",")
+      .map(email => email.trim())
+      .filter(email => email.length > 0);
     
     if (premiumOverrideEmails.includes(user.email)) {
       logStep("Premium override applied", { email: user.email });
