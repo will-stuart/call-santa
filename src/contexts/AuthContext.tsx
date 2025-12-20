@@ -43,7 +43,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             await supabase.auth.signOut({ scope: 'local' });
           } catch {
             // Clear local storage manually if signOut fails
-            localStorage.removeItem('sb-rlojojqliiveizeiizyp-auth-token');
+            const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
+            localStorage.removeItem(`sb-${projectId}-auth-token`);
           }
           setSession(null);
           setUser(null);

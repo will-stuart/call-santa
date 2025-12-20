@@ -1,73 +1,108 @@
-# Welcome to your Lovable project
+# 🎅 Call Santa
 
-## Project info
+A magical web app that lets children have voice conversations with Santa Claus using AI-powered voice technology.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## ✨ Features
 
-## How can I edit this code?
+- **Voice Calls with Santa** - Real-time AI voice conversations powered by ElevenLabs
+- **Personalization** - Add children's names and context for personalized conversations
+- **Season Pass** - Unlimited calls subscription via Stripe
+- **Progressive Web App** - Install on mobile devices for a native app experience
+- **Beautiful UI** - Festive Christmas theme with snowfall effects
 
-There are several ways of editing your application.
+## 🚀 Getting Started
 
-**Use Lovable**
+### Prerequisites
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+- Node.js 18+
+- A Supabase project
+- A Stripe account (for payments)
+- An ElevenLabs account (for voice AI)
 
-Changes made via Lovable will be committed automatically to this repo.
+### Installation
 
-**Use your preferred IDE**
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/call-santa.git
+cd call-santa
+```
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+2. Install dependencies:
+```bash
+npm install
+```
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+3. Copy the environment template:
+```bash
+cp .env.example .env
+```
 
-Follow these steps:
+4. Fill in your environment variables in `.env`
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+5. Start the development server:
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## 🔧 Configuration
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Supabase Setup
 
-**Use GitHub Codespaces**
+1. Create a new Supabase project
+2. Run the migrations in `supabase/migrations/`
+3. Add your Supabase credentials to `.env`
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Required Supabase Secrets
 
-## What technologies are used for this project?
+Configure these secrets in your Supabase project:
 
-This project is built with:
+| Secret | Description |
+|--------|-------------|
+| `STRIPE_SECRET_KEY` | Your Stripe secret key |
+| `ELEVENLABS_API_KEY` | Your ElevenLabs API key |
+| `ELEVENLABS_AGENT_ID` | Your ElevenLabs conversational agent ID |
+| `PREMIUM_OVERRIDE_EMAILS` | (Optional) Comma-separated emails for premium access |
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Database Tables
 
-## How can I deploy this project?
+The app uses the following tables:
+- `profiles` - User profiles
+- `children` - Children's names and context for personalization
+- `call_logs` - Call history and duration tracking
+- `subscriptions` - Stripe subscription status
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+## 🏗️ Tech Stack
 
-## Can I connect a custom domain to my Lovable project?
+- **Frontend**: React, TypeScript, Vite, Tailwind CSS
+- **UI Components**: shadcn/ui
+- **Backend**: Supabase (Auth, Database, Edge Functions)
+- **Payments**: Stripe
+- **Voice AI**: ElevenLabs Conversational AI
+- **Deployment**: Lovable
 
-Yes, you can!
+## 📁 Project Structure
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+```
+├── src/
+│   ├── components/     # React components
+│   ├── contexts/       # React contexts (Auth)
+│   ├── hooks/          # Custom hooks
+│   ├── pages/          # Page components
+│   └── integrations/   # Supabase client
+├── supabase/
+│   ├── functions/      # Edge functions
+│   └── migrations/     # Database migrations
+└── public/             # Static assets
+```
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## 🤝 Contributing
+
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 📧 Contact
+
+For questions or support, email: northpole@callsanta.app
