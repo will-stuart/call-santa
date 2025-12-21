@@ -59,6 +59,7 @@ Configure these secrets in your Supabase project:
 | Secret | Description |
 |--------|-------------|
 | `STRIPE_SECRET_KEY` | Your Stripe secret key |
+| `STRIPE_PRICE_ID` | Your Stripe Price ID for the Season Pass subscription |
 | `ELEVENLABS_API_KEY` | Your ElevenLabs API key |
 | `ELEVENLABS_AGENT_ID` | Your ElevenLabs conversational agent ID |
 | `PREMIUM_OVERRIDE_EMAILS` | (Optional) Comma-separated emails for premium access |
