@@ -32,7 +32,13 @@ serve(async (req) => {
     if (!user?.email) throw new Error("User not authenticated or email not available");
     logStep("User authenticated", { userId: user.id, email: user.email });
 
-    const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", { 
+    const stripeSecretKey = Deno.env.get("STRIPE_SECRET_KEY");
+    if (!stripeSecretKey) throw new Error("STRIPE_SECRET_KEY is not set");
+    
+    const stripePriceId = Deno.env.get("STRIPE_PRICE_ID");
+    if (!stripePriceId) throw new Error("STRIPE_PRICE_ID is not set");
+    
+    const stripe = new Stripe(stripeSecretKey, { 
       apiVersion: "2025-08-27.basil" 
     });
     
@@ -48,7 +54,7 @@ serve(async (req) => {
       customer_email: customerId ? undefined : user.email,
       line_items: [
         {
-          price: "price_1SeSwVLwxCfI06Y1zMiZCjck",
+          price: stripePriceId,
           quantity: 1,
         },
       ],
