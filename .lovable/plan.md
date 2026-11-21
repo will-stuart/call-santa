@@ -19,17 +19,27 @@ Smoother calls, a mute button so kids don't accidentally cut Santa off, better h
 - Fetch the call token while the phone is ringing instead of after, and shorten the fake ring, so calls connect faster.
 - Show a small "connection is weak" note if the line drops quality.
 
-## 4. Newest voice model
-- I'll confirm in ElevenLabs' current docs which newest voice model is actually available for live agents (I can't confirm a "v4" from here) and whether it can be set from the app.
-- If it can, the app selects it per call; otherwise you'll get exact steps to switch it on in your ElevenLabs agent.
+## 4. Santa on Eleven v4 Turbo
+- Switch Santa's agent voice to Eleven v4 Turbo, ElevenLabs' real-time model for live calls (~100ms response). Selecting it turns on "Expressive mode" and their new turn-taking system with fewer false interruptions.
+- Santa's instructions get expressive tags, e.g. [laughs] for a real "Ho ho ho", [whispers] for secrets about presents.
+- Agent settings applied: Turn eagerness "Patient" (kids pause a lot), Santa's opening line can't be interrupted, longer silence wait before Santa prompts again, max call length matched to the plan's minutes.
 
 ## 5. Quick health check
 - Re-check the call screen on phones, the ending/cleanup of calls (minutes always saved), and error messages.
+
+## 6. How Santa's memory (context) is saved
+Today: each child's name and notes are stored in the app's database and sent to Santa at the start of every call. Nothing from the call itself is kept, matching the Privacy page.
+Upgrade:
+- Notes become structured: age, wishes, pets, siblings, friends, recent wins, things to avoid. Easier for parents to fill in, easier for Santa to use naturally.
+- Optional "Santa remembers" switch per child (off by default): after a call, a short summary (e.g. "asked for a red bike, dog is called Max") is saved to that child's notes, and parents can review/edit/delete it in Settings. The Privacy page gets a matching line. The call audio and full transcript are never stored.
+- Santa is told which child is calling (picked before the call), so he greets them by name instead of guessing.
 
 ## Technical details
 - `useConversation` exposes `micMuted`; pass state into the hook, add `MuteButton` in `CallButton.tsx`, label in `SantaStatus.tsx`.
 - Push-to-talk = toggle `micMuted` on pointer down/up.
 - Bump `@elevenlabs/react` to latest; adjust `startSession` options if the API changed; `getUserMedia({ audio: { echoCancellation, noiseSuppression, autoGainControl } })`.
 - Prefetch token in parallel with ring; ring 1–1.5s.
-- Model / turn settings via `overrides.tts` / agent config if latest SDK + agent security settings allow overrides; else dashboard steps.
+- Agent config updated once via ElevenLabs API (PATCH agent): `tts.model_id = eleven_v4_turbo`, `turn.turn_eagerness = patient`, `agent.disable_first_message_interruptions = true`, `turn.turn_timeout`. Run from a temporary admin-only function using the existing key; fall back to dashboard steps if refused.
+- Memory: add `memory_enabled` + `call_memories` (child_id, summary, created_at) with owner-only RLS; summary built after the call from the `agent_response`/`user_transcript` events held in memory only, summarised server-side by Lovable AI, then discarded.
+- Child picker before call passes `dynamicVariables`/prompt with that child's profile.
 - Prompt rules appended in `useSantaCall.ts`.
