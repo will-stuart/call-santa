@@ -6,3 +6,10 @@
 - [x] Opt-in "Santa Remembers" notes
 - [x] Agent: v4 Turbo expressive, Patient turn-taking, skip-turn, guardrails, no recording
 - [ ] Supervised test call with the kids (waits on owner)
+
+# Storybook Christmas redesign
+- [x] Design tokens: warm storybook palette, textures, fonts
+- [x] Proper Santa logo (hat lettering default; awaiting user's pick) → header, auth, dashboard, favicon
+- [x] Landing page rewrite (hero, features, pricing, footer)
+- [x] Header, Auth, dashboard call screen, Season Pass modal polish
+- [x] Visual check in browser (landing + auth verified)

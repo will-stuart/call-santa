@@ -43,7 +43,7 @@ export const SeasonPassModal = ({ open, onOpenChange, customMessage }: SeasonPas
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-card border-border sm:max-w-md">
+      <DialogContent className="storybook-card sm:max-w-md border-accent/30">
         <DialogHeader>
           <DialogTitle className="text-foreground font-display flex items-center gap-2">
             <Crown className="h-5 w-5 text-accent" />

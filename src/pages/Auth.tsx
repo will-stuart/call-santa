@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 import { Link } from 'react-router-dom';
 import { Checkbox } from '@/components/ui/checkbox';
+import logoHat from '@/assets/logo-hat.png';
 
 const authSchema = z.object({
   email: z.string().trim().email({ message: "Please enter a valid email address" }),
@@ -122,9 +123,9 @@ const Auth = () => {
     <div className="min-h-screen bg-background relative overflow-hidden flex items-center justify-center px-4">
       <Snowfall />
       
-      <Card className="w-full max-w-md relative z-10 bg-card/90 backdrop-blur border-border">
+      <Card className="w-full max-w-md relative z-10 storybook-card">
         <CardHeader className="text-center">
-          <div className="text-6xl mb-4">🎅</div>
+          <img src={logoHat} alt="Call Santa" width={1024} height={1024} loading="lazy" className="w-28 mx-auto mb-4 animate-float-gentle" />
           <CardTitle className="text-3xl font-display text-foreground">
             {isLogin ? 'Welcome Back!' : 'Join Call Santa'}
           </CardTitle>
@@ -205,7 +206,7 @@ const Auth = () => {
           </div>
           
           <p className="mt-6 text-center text-sm text-muted-foreground font-body">
-            🎄 3 free calls included, then $30/mo Season Pass 🎄
+            3 free calls included, then $30/mo Season Pass
           </p>
         </CardContent>
       </Card>

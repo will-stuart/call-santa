@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { SeasonPassModal } from "@/components/SeasonPassModal";
+import logoHat from "@/assets/logo-hat.png";
 
 const Index = () => {
   const { callStatus, isSpeaking, isMuted, pushToTalk, startCall, endCall, toggleMute, setPushToTalk, holdToTalk } = useSantaCall();
@@ -63,9 +64,14 @@ const Index = () => {
           <>
             {/* Header */}
             <div className="text-center mb-12">
-              <h1 className="text-5xl md:text-7xl font-display font-bold text-foreground mb-4">
-                🎅 Call Santa
-              </h1>
+              <img
+                src={logoHat}
+                alt="Call Santa"
+                width={1024}
+                height={1024}
+                className="w-40 md:w-52 mx-auto mb-2 animate-float-gentle drop-shadow-[0_10px_28px_hsl(350_60%_4%/0.6)]"
+              />
+              <h1 className="sr-only">Call Santa</h1>
               <p className="text-xl md:text-2xl font-body text-muted-foreground">
                 {callStatus === "idle" && "Tap to call Santa!"}
                 {callStatus === "ringing" && "Ringing the North Pole..."}
@@ -75,7 +81,8 @@ const Index = () => {
             </div>
 
         {/* Call button */}
-        <div className="mb-8">
+        <div className="mb-8 relative">
+          <div className="call-halo absolute -inset-10 rounded-full pointer-events-none" aria-hidden="true" />
           <CallButton
             callStatus={callStatus}
             onStartCall={async () => {

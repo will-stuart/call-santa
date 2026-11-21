@@ -16,6 +16,7 @@ export default {
       fontFamily: {
         display: ["Fredoka", "sans-serif"],
         body: ["Quicksand", "sans-serif"],
+        script: ["'Mountains of Christmas'", "cursive"],
       },
       colors: {
         border: "hsl(var(--border))",

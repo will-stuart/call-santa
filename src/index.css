@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&family=Mountains+of+Christmas:wght@400;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,43 +6,43 @@
 
 @layer base {
   :root {
-    /* Festive Christmas theme - kid-friendly and colorful */
-    --background: 0 75% 8%;
-    --foreground: 45 100% 96%;
+    /* Storybook Christmas - warm, handcrafted picture-book palette */
+    --background: 350 52% 9%;
+    --foreground: 42 55% 93%;
 
-    --card: 0 70% 12%;
-    --card-foreground: 45 100% 96%;
+    --card: 350 42% 13%;
+    --card-foreground: 42 55% 93%;
 
-    --popover: 0 70% 12%;
-    --popover-foreground: 45 100% 96%;
+    --popover: 350 42% 13%;
+    --popover-foreground: 42 55% 93%;
 
-    --primary: 142 70% 45%;
-    --primary-foreground: 45 100% 96%;
+    --primary: 152 42% 36%;
+    --primary-foreground: 42 55% 95%;
 
-    --secondary: 0 75% 55%;
-    --secondary-foreground: 45 100% 96%;
+    --secondary: 355 62% 46%;
+    --secondary-foreground: 42 55% 95%;
 
-    --muted: 0 50% 20%;
-    --muted-foreground: 45 50% 70%;
+    --muted: 350 30% 18%;
+    --muted-foreground: 38 28% 66%;
 
-    --accent: 45 100% 50%;
-    --accent-foreground: 0 75% 8%;
+    --accent: 42 82% 55%;
+    --accent-foreground: 350 52% 10%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 45 100% 96%;
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 42 55% 95%;
 
-    --border: 0 50% 25%;
-    --input: 0 50% 20%;
-    --ring: 142 70% 45%;
+    --border: 350 28% 22%;
+    --input: 350 30% 17%;
+    --ring: 42 82% 55%;
 
     --radius: 1rem;
 
     /* Custom festive colors */
-    --santa-red: 0 75% 45%;
-    --santa-white: 45 100% 96%;
-    --christmas-green: 142 70% 35%;
-    --gold: 45 100% 50%;
-    --snow: 200 30% 95%;
+    --santa-red: 355 62% 46%;
+    --santa-white: 42 55% 95%;
+    --christmas-green: 152 42% 32%;
+    --gold: 42 82% 55%;
+    --snow: 40 45% 96%;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -62,6 +62,39 @@
 
   body {
     @apply bg-background text-foreground font-body;
+    /* Hearth glow: warm light from above fading into deep winter red */
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, hsl(var(--accent) / 0.10), transparent 70%),
+      radial-gradient(ellipse 60% 40% at 50% 110%, hsl(var(--secondary) / 0.14), transparent 70%),
+      radial-gradient(ellipse 100% 100% at 50% 50%, transparent 55%, hsl(350 60% 5% / 0.55) 100%);
+    background-attachment: fixed;
+  }
+}
+
+@layer components {
+  /* Soft paper-like card with a warm inner glow and hairline gold edge */
+  .storybook-card {
+    @apply bg-card/85 backdrop-blur-sm border border-border rounded-2xl;
+    box-shadow:
+      inset 0 1px 0 hsl(var(--foreground) / 0.06),
+      0 1px 2px hsl(350 60% 4% / 0.4),
+      0 12px 32px -12px hsl(350 60% 4% / 0.6);
+  }
+
+  /* Gold-rimmed medallion for feature icons */
+  .icon-medallion {
+    @apply flex items-center justify-center rounded-full;
+    background:
+      radial-gradient(circle at 35% 30%, hsl(var(--accent) / 0.22), hsl(var(--accent) / 0.06) 70%);
+    box-shadow:
+      inset 0 0 0 1px hsl(var(--accent) / 0.35),
+      0 0 24px -6px hsl(var(--accent) / 0.35);
+  }
+
+  /* Soft halo behind the big call button */
+  .call-halo {
+    background: radial-gradient(circle, hsl(var(--primary) / 0.28), transparent 65%);
+    filter: blur(8px);
   }
 }
 
@@ -104,6 +137,26 @@
   }
 }
 
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.15;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes float-gentle {
+  0%, 100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(2deg);
+  }
+}
+
 .animate-snowfall {
   animation: snowfall linear infinite;
 }
@@ -118,4 +171,12 @@
 
 .animate-bounce-soft {
   animation: bounce-soft 1s ease-in-out infinite;
+}
+
+.animate-twinkle {
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+.animate-float-gentle {
+  animation: float-gentle 5s ease-in-out infinite;
 }
