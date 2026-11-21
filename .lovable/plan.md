@@ -34,6 +34,22 @@ Upgrade:
 - Optional "Santa remembers" switch per child (off by default): after a call, a short summary (e.g. "asked for a red bike, dog is called Max") is saved to that child's notes, and parents can review/edit/delete it in Settings. The Privacy page gets a matching line. The call audio and full transcript are never stored.
 - Santa is told which child is calling (picked before the call), so he greets them by name instead of guessing.
 
+## 7. Cost check (60% margin goal)
+ElevenLabs charges one rate per call minute whatever voice model is used, so v4 Turbo costs the same as today: about $0.08/min plus a small AI "brain" fee (~$0.003–0.01/min).
+
+Season Pass, $30/month, worst case (customer uses all 100 minutes):
+- Voice: 100 × ~$0.09 ≈ $9
+- Stripe fees ≈ $1.20
+- Memory summaries (if on): under $0.10
+- Total ≈ $10.30 → about 66% margin. Typical customers use less, so margin is usually higher.
+- Break-even line for 60%: about 120 minutes per Season Pass, so 100 minutes leaves headroom.
+
+Risks to guard against:
+- "Burst" minutes cost double ($0.16) when too many calls happen at once (e.g. Christmas Eve). At that rate a heavy user drops margin to ~43%. Plan: cap simultaneous calls in the app and show a friendly "Santa's line is busy, try in a minute" instead of paying burst rates.
+- Free users cost ~$0.18 each (2 min) and pay nothing — fine as marketing, but worth watching sign-up abuse.
+- Calls are hard-stopped when minutes run out (already in place; I'll double-check it ends the call live, not just blocks the next one).
+- A monthly cost/margin view isn't possible from inside the app without your ElevenLabs billing; I'll add per-call minute logs you can compare against your ElevenLabs invoice.
+
 ## Technical details
 - `useConversation` exposes `micMuted`; pass state into the hook, add `MuteButton` in `CallButton.tsx`, label in `SantaStatus.tsx`.
 - Push-to-talk = toggle `micMuted` on pointer down/up.
