@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ConversationProvider } from "@elevenlabs/react";
 import { Snowfall } from "@/components/Snowfall";
 import { CallButton } from "@/components/CallButton";
 import { SantaStatus } from "@/components/SantaStatus";
@@ -13,7 +14,7 @@ import Footer from "@/components/Footer";
 import { SeasonPassModal } from "@/components/SeasonPassModal";
 
 const Index = () => {
-  const { callStatus, isSpeaking, startCall, endCall } = useSantaCall();
+  const { callStatus, isSpeaking, isMuted, pushToTalk, startCall, endCall, toggleMute, setPushToTalk, holdToTalk } = useSantaCall();
   const { checkCallLimits } = useCallLimits();
   const { isLoading: isSubscriptionLoading, isPremium, subscriptionEnd } = useSubscription();
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
@@ -99,11 +100,16 @@ const Index = () => {
               }
             }}
             onEndCall={endCall}
+            isMuted={isMuted}
+            pushToTalk={pushToTalk}
+            onToggleMute={toggleMute}
+            onTogglePushToTalk={() => setPushToTalk(!pushToTalk)}
+            onHoldToTalk={holdToTalk}
           />
         </div>
 
         {/* Speaking status */}
-        <SantaStatus isSpeaking={isSpeaking} isConnected={callStatus === "connected"} />
+        <SantaStatus isSpeaking={isSpeaking} isConnected={callStatus === "connected"} isMuted={isMuted} pushToTalk={pushToTalk} />
 
         {/* Usage display - only show when running low (80%+) */}
         {usage && callStatus === "idle" && (
@@ -137,4 +143,10 @@ const Index = () => {
   );
 };
 
-export default Index;
+const IndexPage = () => (
+  <ConversationProvider>
+    <Index />
+  </ConversationProvider>
+);
+
+export default IndexPage;

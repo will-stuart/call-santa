@@ -1,9 +1,11 @@
 interface SantaStatusProps {
   isSpeaking: boolean;
   isConnected: boolean;
+  isMuted?: boolean;
+  pushToTalk?: boolean;
 }
 
-export function SantaStatus({ isSpeaking, isConnected }: SantaStatusProps) {
+export function SantaStatus({ isSpeaking, isConnected, isMuted, pushToTalk }: SantaStatusProps) {
   if (!isConnected) return null;
 
   return (
@@ -14,7 +16,11 @@ export function SantaStatus({ isSpeaking, isConnected }: SantaStatusProps) {
         }`}
       />
       <span className="font-display font-medium text-foreground">
-        {isSpeaking ? "Santa is speaking..." : "Santa is listening..."}
+        {isSpeaking
+          ? "Santa is speaking..."
+          : isMuted
+            ? pushToTalk ? "Hold the big button to talk" : "You're muted – Santa can talk"
+            : "Santa is listening..."}
       </span>
     </div>
   );

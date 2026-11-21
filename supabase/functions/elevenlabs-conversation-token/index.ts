@@ -53,6 +53,27 @@ serve(async (req) => {
       throw new Error("ElevenLabs Agent ID not configured");
     }
 
+    // Busy-line cap: keep simultaneous calls under the ElevenLabs plan's concurrency
+    // limit so we never pay "burst" minutes (double rate). Calls with no saved
+    // duration that started in the last 15 minutes count as live.
+    const maxConcurrent = parseInt(Deno.env.get("MAX_CONCURRENT_CALLS") ?? "10", 10);
+    const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    if (serviceKey && maxConcurrent > 0) {
+      const admin = createClient(Deno.env.get("SUPABASE_URL") ?? "", serviceKey);
+      const since = new Date(Date.now() - 15 * 60 * 1000).toISOString();
+      const { count, error: countError } = await admin
+        .from("call_logs")
+        .select("id", { count: "exact", head: true })
+        .is("duration_seconds", null)
+        .gte("started_at", since);
+      if (!countError && (count ?? 0) >= maxConcurrent) {
+        return new Response(
+          JSON.stringify({ error: "busy", message: "Santa's line is busy right now. Try again in a minute!" }),
+          { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+    }
+
     console.log("Fetching conversation token for agent:", ELEVENLABS_AGENT_ID);
 
     const response = await fetch(
@@ -60,9 +81,6 @@ serve(async (req) => {
       {
         headers: {
           "xi-api-key": ELEVENLABS_API_KEY,
-          // Privacy intent headers (documentation purposes - signals our data handling preferences)
-          "X-Client-Privacy-Request": "minimal-retention",
-          "X-Data-Usage": "no-training",
         },
       }
     );

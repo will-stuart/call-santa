@@ -64,6 +64,7 @@ const Privacy = () => {
                 <li>Voice conversations are processed in real-time and immediately discarded by Call Santa</li>
                 <li>No audio recordings are saved or stored by our service</li>
                 <li>Conversation transcripts are not retained by Call Santa</li>
+                <li>If you turn on "Santa Remembers" (off by default), a short note about each call (for example a wish or a pet's name) is created by AI and saved to your account. You can view and delete these notes in Settings at any time</li>
                 <li>Our voice partner (ElevenLabs) processes calls according to their commercial privacy policy</li>
               </ul>
             </section>

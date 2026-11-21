@@ -1,3 +1,4 @@
+import { SantaMemoryCard } from "@/components/settings/SantaMemoryCard";
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from "@/contexts/AuthContext";
@@ -326,6 +327,8 @@ const Settings = () => {
                 onDelete={handleDelete}
                 onUpgrade={() => setShowUpgradeModal(true)}
               />
+
+              <SantaMemoryCard />
 
               <AccountManagementCard
                 isExporting={isExporting}
