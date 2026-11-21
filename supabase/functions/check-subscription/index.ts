@@ -47,7 +47,7 @@ serve(async (req) => {
       .map(email => email.trim())
       .filter(email => email.length > 0);
     
-    if (premiumOverrideEmails.includes(user.email)) {
+    if (premiumOverrideEmails.map(e => e.toLowerCase()).includes(user.email.toLowerCase())) {
       logStep("Premium override applied", { email: user.email });
       
       // Update database to premium status
@@ -59,7 +59,8 @@ serve(async (req) => {
       return new Response(JSON.stringify({
         subscribed: true,
         status: "premium",
-        subscription_end: null
+        subscription_end: null,
+        unlimited: true
       }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 200,

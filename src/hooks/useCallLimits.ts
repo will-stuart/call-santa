@@ -15,7 +15,8 @@ export function useCallLimits() {
 
   const checkCallLimits = useCallback(async (
     isPremium: boolean = false,
-    subscriptionEnd: string | null = null
+    subscriptionEnd: string | null = null,
+    isUnlimited: boolean = false
   ): Promise<CallLimits> => {
     if (!user) {
       return { canCall: false, callsUsed: 0, callsLimit: 0, minutesUsed: 0, minutesLimit: 0, isPremium: false };
@@ -52,9 +53,10 @@ export function useCallLimits() {
       const callsLimit = isPremium ? PREMIUM_CALLS_LIMIT : FREE_CALLS_LIMIT;
       const minutesLimit = isPremium ? PREMIUM_MINUTES_LIMIT : FREE_MINUTES_LIMIT;
 
-      const canCall = callsUsed < callsLimit && minutesUsed < minutesLimit;
+      // Unlimited accounts (PREMIUM_OVERRIDE_EMAILS, verified server-side) skip limits
+      const canCall = isUnlimited || (callsUsed < callsLimit && minutesUsed < minutesLimit);
 
-      return { canCall, callsUsed, callsLimit, minutesUsed, minutesLimit, isPremium };
+      return { canCall, callsUsed, callsLimit, minutesUsed, minutesLimit, isPremium, isUnlimited };
     } finally {
       setIsChecking(false);
     }

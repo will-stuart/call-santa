@@ -16,4 +16,5 @@ export interface UsageData {
 export interface CallLimits extends UsageData {
   canCall: boolean;
   isPremium: boolean;
+  isUnlimited?: boolean;
 }

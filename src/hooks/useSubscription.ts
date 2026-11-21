@@ -6,6 +6,7 @@ interface SubscriptionState {
   status: 'free' | 'premium' | 'loading';
   subscriptionEnd: string | null;
   isLoading: boolean;
+  isUnlimited: boolean;
 }
 
 export const useSubscription = () => {
@@ -14,6 +15,7 @@ export const useSubscription = () => {
     status: 'loading',
     subscriptionEnd: null,
     isLoading: true,
+    isUnlimited: false,
   });
 
   const checkSubscription = useCallback(async () => {
@@ -23,7 +25,7 @@ export const useSubscription = () => {
     }
     
     if (!user || !session) {
-      setState({ status: 'free', subscriptionEnd: null, isLoading: false });
+      setState({ status: 'free', subscriptionEnd: null, isLoading: false, isUnlimited: false });
       return;
     }
 
@@ -40,10 +42,11 @@ export const useSubscription = () => {
         status: data.subscribed ? 'premium' : 'free',
         subscriptionEnd: data.subscription_end,
         isLoading: false,
+        isUnlimited: data.unlimited === true,
       });
     } catch (error) {
       console.error('Error checking subscription:', error);
-      setState({ status: 'free', subscriptionEnd: null, isLoading: false });
+      setState({ status: 'free', subscriptionEnd: null, isLoading: false, isUnlimited: false });
     }
   }, [user, session, authLoading]);
 

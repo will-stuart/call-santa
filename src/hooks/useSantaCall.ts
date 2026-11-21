@@ -39,7 +39,7 @@ export function useSantaCall() {
   const [pushToTalk, setPushToTalkState] = useState(false);
   const { user } = useAuth();
   const { checkCallLimits, logCall, updateCallDuration } = useCallLimits();
-  const { isPremium, subscriptionEnd } = useSubscription();
+  const { isPremium, subscriptionEnd, isUnlimited } = useSubscription();
 
   const callStartTime = useRef<number | null>(null);
   const currentCallLogId = useRef<string | null>(null);
@@ -142,12 +142,12 @@ export function useSantaCall() {
   }, [callStatus, endSession]);
 
   const startCall = useCallback(async (): Promise<CallLimitExceeded> => {
-    const limits = await checkCallLimits(isPremium, subscriptionEnd);
+    const limits = await checkCallLimits(isPremium, subscriptionEnd, isUnlimited);
     if (!limits.canCall) {
       if (limits.callsUsed >= limits.callsLimit) return { exceeded: true, type: "calls", isPremium: limits.isPremium };
       if (limits.minutesUsed >= limits.minutesLimit) return { exceeded: true, type: "minutes", isPremium: limits.isPremium };
     }
-    remainingSeconds.current = Math.max(10, Math.floor((limits.minutesLimit - limits.minutesUsed) * 60));
+    remainingSeconds.current = limits.isUnlimited ? 30 * 60 : Math.max(10, Math.floor((limits.minutesLimit - limits.minutesUsed) * 60));
 
     try {
       setCallStatus("ringing");
@@ -205,7 +205,7 @@ export function useSantaCall() {
       toast.error(msg);
       return { exceeded: false };
     }
-  }, [conversation, ringAudio, stopRing, childrenContext, memoriesContext, checkCallLimits, isPremium, subscriptionEnd, setMuted]);
+  }, [conversation, ringAudio, stopRing, childrenContext, memoriesContext, checkCallLimits, isPremium, subscriptionEnd, isUnlimited, setMuted]);
 
   const endCall = useCallback(async () => {
     setCallStatus("ending");

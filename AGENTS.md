@@ -6,3 +6,6 @@
 - Call transcripts live only in memory; only an opt-in short summary is stored in `santa_memories`. Why: privacy promise.
 - Assemble call prompts with `buildSantaPrompt` in `src/lib/santaPrompt.ts`, placing safety instructions after family context; provider-backed behavioral tests must use this same builder. Why: call behavior and evaluations must share the instructions actually sent to Santa.
 - Santa's ElevenLabs agent keeps voice recording off, 1-day retention, child-safety guardrails and the skip_turn tool on. Why: privacy promise on the Privacy page and patient listening for young kids depend on them.
+
+## Billing
+- Unlimited (no call/minute limit) accounts come from the `PREMIUM_OVERRIDE_EMAILS` secret via `check-subscription` returning `unlimited: true`. Why: keeps personal emails out of public source.
