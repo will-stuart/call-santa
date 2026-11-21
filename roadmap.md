@@ -9,7 +9,9 @@
 
 # Storybook Christmas redesign
 - [x] Design tokens: warm storybook palette, textures, fonts
-- [x] Proper Santa logo (hat lettering default; awaiting user's pick) → header, auth, dashboard, favicon
+- [x] Proper Santa logo (one-line hat lettering, user-approved) → header, auth, dashboard, favicon
+- [x] Light/dark logo variants via BrandLogo component (auto-swaps with theme)
+- [x] Remove duplicate "Call Santa" text next to header logo
 - [x] Landing page rewrite (hero, features, pricing, footer)
 - [x] Header, Auth, dashboard call screen, Season Pass modal polish
 - [x] Visual check in browser (landing + auth verified)

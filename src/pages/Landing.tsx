@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Phone, Sparkles, Heart, Star, BookOpen, Check } from "lucide-react";
 import Header from "@/components/Header";
-import logoHat from "@/assets/logo-hat.png";
+import { BrandLogo } from "@/components/BrandLogo";
 
 const HeroStars = () => (
   <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
@@ -29,12 +29,9 @@ const Landing = () => {
       <section className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-16 pt-24">
         <HeroStars />
         <div className="text-center max-w-4xl mx-auto">
-          <img
-            src={logoHat}
-            alt="Call Santa"
-            width={1024}
-            height={1024}
-            className="w-56 md:w-72 mx-auto mb-2 animate-float-gentle drop-shadow-[0_12px_32px_hsl(350_60%_4%/0.6)]"
+          <BrandLogo
+            priority
+            className="w-72 md:w-96 mx-auto mb-2 animate-float-gentle drop-shadow-[0_12px_32px_hsl(350_60%_4%/0.6)]"
           />
           <p className="font-script text-2xl md:text-3xl text-accent mb-4">The North Pole is calling…</p>
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold text-foreground mb-6 leading-tight">

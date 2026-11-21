@@ -6,7 +6,7 @@ import { useSubscription } from "@/hooks/useSubscription";
 import { SeasonPassModal } from "@/components/SeasonPassModal";
 import { LogIn, LogOut, Settings, Crown, Check } from "lucide-react";
 import { useLocation } from "react-router-dom";
-import logoHat from "@/assets/logo-hat.png";
+import { BrandLogo } from "@/components/BrandLogo";
 
 interface HeaderProps {
   showAuthActions?: boolean;
@@ -31,8 +31,8 @@ const Header = ({ showAuthActions = false }: HeaderProps) => {
           onClick={() => navigate(user ? "/dashboard" : "/")}
           className="flex items-center gap-2 hover:opacity-80 transition-opacity"
         >
-          <img src={logoHat} alt="Call Santa" width={1024} height={1024} loading="lazy" className="h-10 w-10 object-contain" />
-          <span className="font-display font-bold text-foreground">Call Santa</span>
+          <BrandLogo className="h-9 w-auto object-contain" />
+          <span className="sr-only">Call Santa</span>
         </button>
 
         {/* Right side actions */}

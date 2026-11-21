@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { SeasonPassModal } from "@/components/SeasonPassModal";
-import logoHat from "@/assets/logo-hat.png";
+import { BrandLogo } from "@/components/BrandLogo";
 
 const Index = () => {
   const { callStatus, isSpeaking, isMuted, pushToTalk, startCall, endCall, toggleMute, setPushToTalk, holdToTalk } = useSantaCall();
@@ -64,12 +64,9 @@ const Index = () => {
           <>
             {/* Header */}
             <div className="text-center mb-12">
-              <img
-                src={logoHat}
-                alt="Call Santa"
-                width={1024}
-                height={1024}
-                className="w-40 md:w-52 mx-auto mb-2 animate-float-gentle drop-shadow-[0_10px_28px_hsl(350_60%_4%/0.6)]"
+              <BrandLogo
+                priority
+                className="w-56 md:w-72 mx-auto mb-2 animate-float-gentle drop-shadow-[0_10px_28px_hsl(350_60%_4%/0.6)]"
               />
               <h1 className="sr-only">Call Santa</h1>
               <p className="text-xl md:text-2xl font-body text-muted-foreground">
