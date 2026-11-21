@@ -115,6 +115,7 @@ export function useSantaCall() {
     onConnect: async () => {
       stopRing();
       setCallStatus("connected");
+      setPushToTalkState(false);
       callStartTime.current = Date.now();
       const callId = await logCall();
       currentCallLogId.current = callId;
@@ -136,7 +137,11 @@ export function useSantaCall() {
     },
   });
 
-  const { endSession, setMuted, isMuted } = conversation;
+  const { endSession, setMuted: rawSetMuted, isMuted } = conversation;
+  // v1 throws when muting with no live session, so only touch the mic during a call
+  const setMuted = useCallback((muted: boolean) => {
+    try { rawSetMuted(muted); } catch { /* no active call */ }
+  }, [rawSetMuted]);
 
   // End the call automatically when the plan's minutes run out
   useEffect(() => {
@@ -190,8 +195,7 @@ export function useSantaCall() {
         ? `\n\n## WHAT YOU REMEMBER FROM PAST CALLS ##\n${memoriesContext}\nMention one of these only if it fits naturally (e.g. "How is Max the dog?").`
         : "";
 
-      setMuted(false);
-      conversation.startSession({
+      await conversation.startSession({
         conversationToken: data.token,
         connectionType: "webrtc",
         overrides: {
