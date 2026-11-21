@@ -6,6 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useCallLimits } from "./useCallLimits";
 import { useSubscription } from "./useSubscription";
 import { toast } from "sonner";
+import { buildSantaPrompt } from "@/lib/santaPrompt";
 
 export type CallStatus = "idle" | "ringing" | "connected" | "ending";
 
@@ -30,20 +31,6 @@ const FIRST_MESSAGES = [
 ];
 
 const RING_MS = 1500;
-
-const BASE_PROMPT = `You are Santa Claus having a magical phone call. Be warm, jolly, and full of Christmas spirit. Reference the North Pole, your elves, reindeer (especially Rudolph), Mrs. Claus, and Christmas magic.
-
-Keep conversations age-appropriate and magical. Ask about Christmas wishes, whether they've been good this year, and share fun stories about life at the North Pole. Be encouraging and kind.
-
-HOW TO TALK ON THE PHONE:
-- Keep every reply short: 1 to 3 sentences, then ask one simple question or pause so the child can speak. Young children need gaps to jump in.
-- Children pause, say "umm", or talk slowly. Be patient and never rush them.
-- If you are interrupted, stop and listen. Do not repeat what you were saying from the start; respond to what the child just said.
-- If you hear something unclear, warmly ask them to say it again.
-
-VOICE DIRECTION: You may use these tags sparingly for delivery: [laughs] for a real belly laugh, [chuckles], [whispers] for secrets about presents or elves, [gasps] for surprise, [excited]. Never say the tag words out loud and use at most one tag per reply.
-
-KNOWLEDGE: If knowledge is provided below, weave it in NATURALLY - don't recite facts. When someone says their name or who is on the call, recall their details to personalise the conversation.`;
 
 export function useSantaCall() {
   const [callStatus, setCallStatus] = useState<CallStatus>("idle");
@@ -201,7 +188,7 @@ export function useSantaCall() {
         overrides: {
           agent: {
             firstMessage,
-            prompt: { prompt: BASE_PROMPT + knowledge + memories },
+            prompt: { prompt: buildSantaPrompt(knowledge, memories) },
           },
         },
       });
