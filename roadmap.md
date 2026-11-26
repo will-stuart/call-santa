@@ -1,4 +1,6 @@
 # Roadmap — Santa 2026 upgrade
+- [x] Positive parent-supported behaviour reminders: app and ElevenLabs instructions updated; existing safeguards preserved
+- [x] Five synthetic live text checks passed: parent reminders, nice-list encouragement, gift-threat redirection and no gift promises (sandbox WebRTC unavailable)
 - [x] Mute + hold-to-talk buttons
 - [x] Faster connect, cleaner mic, latest voice library
 - [x] Santa prompt: interruption rules + v4 expressive tags

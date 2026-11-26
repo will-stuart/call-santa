@@ -5,6 +5,7 @@
 - Concurrent calls are capped in `elevenlabs-conversation-token` via `MAX_CONCURRENT_CALLS` (default 10). Why: exceeding ElevenLabs concurrency bills burst minutes at 2x, breaking the margin target.
 - Call transcripts live only in memory; only an opt-in short summary is stored in `santa_memories`. Why: privacy promise.
 - Assemble call prompts with `buildSantaPrompt` in `src/lib/santaPrompt.ts`, placing safety instructions after family context; provider-backed behavioral tests must use this same builder. Why: call behavior and evaluations must share the instructions actually sent to Santa.
+- Behavioral tests may use a public-agent text-only WebSocket fallback when sandbox WebRTC fails; report voice as unverified. Why: this checks provider replies and guardrails without claiming microphone or turn-taking coverage.
 - Santa's ElevenLabs agent keeps voice recording off, 1-day retention, child-safety guardrails and the skip_turn tool on. Why: privacy promise on the Privacy page and patient listening for young kids depend on them.
 
 ## Billing
