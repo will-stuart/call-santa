@@ -1,4 +1,5 @@
 # Roadmap — Santa 2026 upgrade
+- [x] Allow positively framed gift-based behaviour motivation in app and agent; six live text checks passed (voice remains unverified)
 - [x] Positive parent-supported behaviour reminders: app and ElevenLabs instructions updated; existing safeguards preserved
 - [x] Five synthetic live text checks passed: parent reminders, nice-list encouragement, gift-threat redirection and no gift promises (sandbox WebRTC unavailable)
 - [x] Mute + hold-to-talk buttons
